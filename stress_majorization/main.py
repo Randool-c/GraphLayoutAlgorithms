@@ -8,6 +8,7 @@ from .get_laplacian import construct_laplacian
 from . import cfg as settings
 from cfg import path
 from .conjugate_gradient import cg
+from data_io import read_data
 
 
 class Solver:
@@ -72,23 +73,6 @@ class Solver:
         return ans_x
 
 
-def read_data(filepath):
-    with open(filepath, 'r') as f:
-        data = f.readlines()
-    data = [x.split() for x in data[1:]]
-    n_nodes = int(data[0][0])
-    n_edges = int(data[0][2])
-
-    nodes = list(range(1, 1 + n_nodes))
-    node_to_idx = {v: i for i, v in enumerate(nodes)}
-    edges = []
-    for edge in data[1:]:
-        src = int(edge[0])
-        dst = int(edge[1])
-        edges.append([node_to_idx[src], node_to_idx[dst]])
-    return nodes, edges
-
-
 def run_stress_model():
     nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
@@ -96,6 +80,7 @@ def run_stress_model():
     dim = 2
     solver = Solver(nodes, edges, dim)
     initial_x = np.random.rand(n_nodes, dim)
+    # initial_x = np.zeros((n_nodes, dim))
     result_x = solver.stress_optimize(initial_x)
     ans = {'nodes': result_x.tolist(), 'edges': edges}
     with open('result.json', 'w') as f:

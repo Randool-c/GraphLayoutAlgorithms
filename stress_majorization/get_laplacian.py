@@ -48,7 +48,7 @@ def construct_laplacian(nodes, edges):
     graphlist = get_graph_list(nodes, edges)
     # print(graphlist)
     for edge in edges:
-        add_edge_len(graphlist, edge, uniform=False)
+        add_edge_len(graphlist, edge, uniform=True)
     print(graphlist)
     adj_len_matrix = get_adj_matrix(graphlist)
     dist = floyed(adj_len_matrix)  # dist[i][j] represents the expected distance between i and j
