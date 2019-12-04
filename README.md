@@ -1,2 +1,2 @@
-Implementation of various graph layout algorithms
+Implementation of several  graph layout algorithms
 
