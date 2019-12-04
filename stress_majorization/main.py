@@ -15,7 +15,7 @@ class Solver:
     def __init__(self, nodes, edges, target_dim=3):
         self.lap, self.dist, self.weights = construct_laplacian(nodes, edges)
 
-        np.savetxt('lap.txt', self.lap)
+        # np.savetxt('lap.txt', self.lap)
         self.delta = self.dist * self.weights
         self.delta = np.where(np.isnan(self.delta), 0, self.delta)
         self.n_nodes = len(nodes)
@@ -74,7 +74,8 @@ class Solver:
 
 
 def run_stress_model():
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
     dim = 2

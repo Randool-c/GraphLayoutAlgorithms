@@ -5,7 +5,12 @@ import numpy as np
 import numpy.matlib
 import json
 
+from os.path import join as pjoin
+
+from cfg import path
 from . import interpolation as ip
+from .get_laplacian import construct_laplacian
+from data_io import read_data, write_data
 
 
 def drawing(laplacian, mass_matrix, dim, interpolation_method, threshold):
@@ -54,6 +59,7 @@ def power_iteration(initial_vectors, laplacian, mass_matrix, epsilon):
 
         tmp /= np.linalg.norm(tmp)
         while True:
+            # print('hello world')
             last_tmp = tmp
             tmp1 = tmp
             for j in range(i):
@@ -88,75 +94,46 @@ def direct_solution(laplacian, mass_matrix, dim, epsilon):
 
 
 class Solver:
-    def __init__(self):
-        pass
+    def __init__(self, nodes, edges, interpolate_method='w', threshold=100, target_dim=2):
+        self.ip_method = interpolate_method
+        self.th = threshold
+        self.lap, self.mass_m = construct_laplacian(nodes, edges)
+        self.n_nodes = len(nodes)
+        self.dim = target_dim
+        # print(self.lap)
+
+    def execute(self):
+        lap = np.matlib.matrix(self.lap)
+        mass_m = np.matlib.matrix(self.mass_m)
+        coordinates = drawing(lap, mass_m, self.dim, self.ip_method, self.th)
+        # print(coordinates)
+        return coordinates
 
 
-# interpolate_method: 'w' -- weighted interpolation, 'e' -- edge contraction interpolation
-# *d: 参数数量取决于layout的维度。
-# 每一个维度是一个两个元素的list，为该维度的起始值和终止值。例如[100, 1000]
-def ace(interpolate_method, *d, threshold=100):
-    n = len(_input)
-    # with open('dataset/data.json') as file:
-    #     _input = json.load(file)["items"]
+class Lapsolver:
+    def __init__(self, lap, mass):
+        self.lap = lap
+        self.mass = mass
 
-    get_index = {}  # 建立一个由IP索引到index的字典
-    for i in range(n):
-        get_index[_input[i]['id']] = i
-
-    data = transform.transf(_input)
-    print("transform completed")
-    laplacian = np.matlib.zeros((n, n), float)
-    mass_matrix = np.matlib.identity(n, float)
-    for edge in data:
-        if edge['sourceIP'] in get_index and edge['destinationIP'] in get_index:
-            i, j = get_index[edge['sourceIP']], get_index[edge['destinationIP']]
-            mass_matrix[i, i] += 1
-            mass_matrix[j, j] += 1
-            laplacian[i, j] -= 1
-            laplacian[j, i] -= 1
-
-    for i in range(n):
-        for j in range(n):
-            if i != j:
-                laplacian[i, i] -= laplacian[i, j]
-
-    coordinates = drawing(laplacian, mass_matrix, dim, interpolate_method, threshold)
-
-    # 当节点很多时，节点的各个维度的坐标趋近于0
-    # 使节点显得比较分散开
-    # for i in range(dim):
-    #     max_value = np.amax(coordinates[..., i])
-    #     min_value = np.amin(coordinates[..., i])
-    #     distance = max_value - min_value
-    #     coordinates[..., i] = 1.9 / distance * coordinates[..., i] - 0.95 * (max_value + min_value) / distance
-
-    for i in range(n):
-        for j in range(dim):
-            _input[i]['dim' + str(j + 1)] = 0.5 * (d[j][1] - d[j][0]) * coordinates[i, j] + 0.5 * (d[j][0] + d[j][1])
-
-    ax1.scatter(coordinates[..., 0].getA().flatten(), coordinates[..., 1].getA().flatten(), c='r', marker='o')
-    plt.show()
-    return _input
+    def execute(self):
+        lap = np.matlib.matrix(self.lap)
+        mass_m = np.matlib.matrix(self.mass)
+        coordinates = drawing(lap, mass_m, 2, 'e', 50)
+        # print(coordinates)
+        return coordinates
 
 
-# def check_laplacian(laplacian):
-#     n = laplacian.shape[0]
-#     for i in range(n):
-#         flag = True
-#         for j in range(n):
-#             if laplacian[i, j] != 0:
-#                 flag = False
-#                 break
-#         if flag:
-#             return False
-#     return True
-
-
-# if __name__ == '__main__':
 def run_halls_energy():
-    ans = ace('w', [0, 1], [0, 1])
-
-    output_json = {'items': ans}
-    with open('nodes_output.json', 'w') as file:
-        json.dump(output_json, file, indent=4)
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
+    print(len(nodes))
+    print(len(edges))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
+    dim = 2
+    solver = Solver(nodes, edges, 'w', 50, dim)
+    # solver = Lapsolver([[9, -5, 0, -4, 0], [-5, 17, -2, -7, -3], [0, -2, 4, -2, 0],
+    #                            [-4, -7, -2, 19, -6], [0, -3, 0, -6, 9]], np.eye(5))
+    result_x = solver.execute()
+    print(result_x)
+    # ans = {'nodes': result_x.tolist(), 'edges': edges}
+    write_data('result.json', result_x.tolist(), edges)
