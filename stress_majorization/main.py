@@ -13,17 +13,6 @@ from .conjugate_gradient import cg
 class Solver:
     def __init__(self, nodes, edges, target_dim=3):
         self.lap, self.dist, self.weights = construct_laplacian(nodes, edges)
-        print(np.all(self.lap==self.lap.T))
-        print('laplacian\n', self.lap)
-        print('distance\n', self.dist)
-        print('weights\n', self.weights)
-        # print(self.lap)
-        # print(np.all(self.lap.T == self.lap))
-        # print(np.mean((self.lap.T - self.lap).abs()))
-        # print(np.max(np.abs(self.lap.T - self.lap)))
-        # print(np.mean(np.abs(self.lap.T - self.lap)))
-        # print('maxvalue;m', np.max(self.lap))
-        # print('meanvalue', np.mean(self.lap))
 
         np.savetxt('lap.txt', self.lap)
         self.delta = self.dist * self.weights
@@ -80,29 +69,6 @@ class Solver:
             x = z[:, i]
             b = lap_z @ z[:, i]
             ans_x[:, i] = cg(self.lap, x, b)
-            # r = b - self.lap @ x
-            # p = r.copy()
-            # r_at_r = r @ r
-            # while True:
-            #     lap_at_p = self.lap @ p
-            #     alpha = r_at_r / (p @ lap_at_p)
-            #     x = x + alpha * p
-            #     new_r = r - alpha * lap_at_p
-            #
-            #     norm = np.linalg.norm(new_r)
-            #     print(norm)
-            #     if np.isnan(norm):
-            #         raise Exception()
-            #     if norm < settings.cg_iteration_terminate_epsilon:
-            #         break
-            #
-            #     new_r_at_new_r = new_r @ new_r
-            #     beta = new_r_at_new_r / r_at_r
-            #     p = new_r + beta * p
-            #
-            #     r = new_r
-            #     r_at_r = new_r_at_new_r
-            ans_x[:, i] = x
         return ans_x
 
 
@@ -127,10 +93,10 @@ def run_stress_model():
     nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
-    solver = Solver(nodes, edges, 3)
-    initial_x = np.random.rand(n_nodes, 2)
+    dim = 2
+    solver = Solver(nodes, edges, dim)
+    initial_x = np.random.rand(n_nodes, dim)
     result_x = solver.stress_optimize(initial_x)
-    print(result_x)
     ans = {'nodes': result_x.tolist(), 'edges': edges}
     with open('result.json', 'w') as f:
         json.dump(ans, f, indent=4)

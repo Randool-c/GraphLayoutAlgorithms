@@ -13,16 +13,20 @@ def get_graph_list(nodes, edges):
     return graphlist
 
 
-def add_edge_len(graph_list, target_edge):
+def add_edge_len(graph_list, target_edge, uniform=False):
     """append 'weight' attribute for each input edge
         :param graph_list: a adjacent table for the graph, formatted as [{dst1: -1 or length, dst2: -1 or length}}, ]
         :param target_edge: (src, dst)
+        :param uniform: whether to use uniform edge length
     """
 
     src, dst = target_edge
     src_adj = set(graph_list[src].keys())
     dst_adj = set(graph_list[dst].keys())
-    length = len(src_adj.union(dst_adj)) - len(src_adj.intersection(dst_adj))
+    if uniform:
+        length = 1
+    else:
+        length = len(src_adj.union(dst_adj)) - len(src_adj.intersection(dst_adj))
     graph_list[src][dst] = length
     graph_list[dst][src] = length
     return length
@@ -44,7 +48,7 @@ def construct_laplacian(nodes, edges):
     graphlist = get_graph_list(nodes, edges)
     # print(graphlist)
     for edge in edges:
-        add_edge_len(graphlist, edge)
+        add_edge_len(graphlist, edge, uniform=False)
     print(graphlist)
     adj_len_matrix = get_adj_matrix(graphlist)
     dist = floyed(adj_len_matrix)  # dist[i][j] represents the expected distance between i and j
