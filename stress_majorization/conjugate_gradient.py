@@ -1,7 +1,13 @@
 import numpy as np
+import torch
 from . import cfg as settings
+from time import time
 
 def cg(A, x, b):
+    begin = time()
+    # A = torch.FloatTensor(A).cuda()
+    # x = torch.FloatTensor(x).cuda()
+    # b = torch.FloatTensor(b).cuda()
     r = b - A @ x
     p = r
     r_at_r = r @ r
@@ -12,6 +18,8 @@ def cg(A, x, b):
         newr = r - alpha * A_at_p
 
         # print('norm', np.linalg.norm(newr))
+        # if torch.norm(newr) < settings.cg_iteration_terminate_epsilon:
+        #     break
         if np.linalg.norm(newr) < settings.cg_iteration_terminate_epsilon:
             break
 
@@ -21,6 +29,7 @@ def cg(A, x, b):
         r = newr
         r_at_r = newr_at_newr
     # print(x)
+    # print('time: ', time() - begin)
     return x
 
 

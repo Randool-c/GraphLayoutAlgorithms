@@ -1,6 +1,6 @@
 import numpy as np
 
-from .shortest_path import floyed
+from utils.shortest_path import floyed, dijkstra_all
 
 
 def get_graph_list(nodes, edges):
@@ -8,8 +8,8 @@ def get_graph_list(nodes, edges):
     graphlist = [{} for _ in range(n_nodes)]
     for edge in edges:
         src, dst = edge
-        graphlist[src][dst] = -1
-        graphlist[dst][src] = -1
+        graphlist[src][dst] = 1
+        graphlist[dst][src] = 1
     return graphlist
 
 
@@ -43,17 +43,21 @@ def get_adj_matrix(graphlist):
     return adj_matrix
 
 
-def construct_laplacian(nodes, edges):
+def construct_laplacian(nodes, edges, method='dijkstra'):
+    assert method in ['floyed', 'dijkstra']
     n_nodes = len(nodes)
     graphlist = get_graph_list(nodes, edges)
-    # print(graphlist)
+    print(graphlist)
     for edge in edges:
         add_edge_len(graphlist, edge, uniform=True)
-    print(graphlist)
-    adj_len_matrix = get_adj_matrix(graphlist)
-    dist = floyed(adj_len_matrix)  # dist[i][j] represents the expected distance between i and j
-    weights = 1 / np.square(dist)
 
+    if method == 'dijkstra':
+        dist = dijkstra_all(graphlist)
+    elif method == 'floyed':
+        adj_len_matrix = get_adj_matrix(graphlist)
+        dist = floyed(adj_len_matrix)  # dist[i][j] represents the expected distance between i and j
+
+    weights = 1 / np.square(dist)
     lap = -weights.copy()
     lap[np.arange(n_nodes), np.arange(n_nodes)] = 0
     lap[np.arange(n_nodes), np.arange(n_nodes)] = -np.sum(lap, axis=1)

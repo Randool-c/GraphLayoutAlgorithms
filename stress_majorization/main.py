@@ -13,6 +13,7 @@ from data_io import read_data
 
 class Solver:
     def __init__(self, nodes, edges, target_dim=3):
+        # self.graphlist = get_graph_list(nodes, edges)
         self.lap, self.dist, self.weights = construct_laplacian(nodes, edges)
 
         # np.savetxt('lap.txt', self.lap)
@@ -31,21 +32,21 @@ class Solver:
 
                 stress_ij = (np.linalg.norm(x[i] - x[j]) / self.dist[i, j] - 1) ** 2
                 # print(stress_ij)
+
                 stress += stress_ij
         return stress
-
-    def terminate(self, x, z):
-        stress_x = self.compute_stress(x)
-        stress_z = self.compute_stress(z)
-        print(stress_x, stress_z)
-        return stress_z - stress_x < settings.stress_optimize_terminate_epsilon * stress_z
 
     def stress_optimize(self, initial_x):
         z = initial_x
         x = self.stress_optimize_iter(z)
-        while not self.terminate(x, z):
+        stress_z = self.compute_stress(z)
+        stress_x = self.compute_stress(x)
+        while not (stress_z - stress_x < settings.stress_optimize_terminate_epsilon * stress_z):
             z = x
+            stress_z = stress_x
             x = self.stress_optimize_iter(z)
+            stress_x = self.compute_stress(x)
+            print(stress_z, stress_x)
         return x
 
     def compute_l_z(self, z):
@@ -74,8 +75,8 @@ class Solver:
 
 
 def run_stress_model():
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
-    # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
     dim = 2
