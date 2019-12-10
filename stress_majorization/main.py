@@ -83,15 +83,17 @@ class Solver:
 
 
 def run_stress_model():
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
-    # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
     dim = 2
     solver = Solver(nodes, edges, dim)
     initial_x = np.random.rand(n_nodes, dim)
     # initial_x = np.zeros((n_nodes, dim))
+    start = time()
     result_x = solver.stress_optimize(initial_x)
+    print('time cost ', time() - start)
     ans = {'nodes': result_x.tolist(), 'edges': edges}
     with open('result.json', 'w') as f:
         json.dump(ans, f, indent=4)
