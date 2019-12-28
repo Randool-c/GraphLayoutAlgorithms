@@ -73,6 +73,7 @@ class Solver:
         x = self.stress_optimize_iter(z)
         stress_z = self.compute_stress(z)
         stress_x = self.compute_stress(x)
+        print(stress_z, stress_x)
         while not (stress_z - stress_x < settings.stress_optimize_terminate_epsilon * stress_z):
             z = x
             stress_z = stress_x
@@ -84,7 +85,8 @@ class Solver:
 
 def run_stress_model():
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'custom_dataset', 'custom_dataset.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
     dim = 2

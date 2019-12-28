@@ -18,12 +18,12 @@ def visualize3d(x, y, z, edges):
 
 
 def visualize2d(x, y, edges):
-    plt.scatter(x, y)
     for edge in edges:
         src, dst = edge
         xpos = [x[src], x[dst]]
         ypos = [y[src], y[dst]]
-        plt.plot(xpos, ypos)
+        plt.plot(xpos, ypos, c='gray', zorder=10)
+    plt.scatter(x, y, c='blue', zorder=20)
     plt.show()
 
 
