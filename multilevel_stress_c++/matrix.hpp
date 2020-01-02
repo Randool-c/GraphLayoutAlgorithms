@@ -13,7 +13,10 @@
 #include<ctime>
 #include <unistd.h>
 
-#include"custom_exceptions.hpp"
+#include"custom_exceptions.h"
+
+#ifndef MULTILEVEL_STRESS_C___MATRIX_HPP
+#define MULTILEVEL_STRESS_C___MATRIX_HPP
 
 namespace mat {
 
@@ -66,7 +69,7 @@ public:
         return nc * nr;
     }
 
-    T operator()(int i, int j){
+    T &operator()(int i, int j){
         // fetch i-th row, j-th column element
         if (i < 0 || j < 0 || i >= nr || j >= nc){
             throw IndexOutOfBound();
@@ -183,6 +186,34 @@ public:
         return tmp;
     }
 
+    Mat<T> operator[](int irow){
+        // get the i-th row which shareds memory with the i-th row in the original matrix
+        if (irow < 0 || irow >= nr) throw IndexOutOfBound();
+
+        Mat<T> tmp(array + irow * nc, 1, nc);
+        return tmp;
+    }
+
+    void set_row(int irow, Mat<T> &other){
+        if (nc != other.size()) throw SetRowError();
+
+        memcpy(array + irow * nc, other.array, sizeof(T) * nc);
+    }
+
+    void set_row(int irow, Mat<T> &other, int irow_other){
+        // 将此矩阵的第irow行设置为另外一个矩阵的irow_other行
+
+        if (nc != other.nc) throw SetRowError();
+
+        memcpy(array + irow * nc, other.array + irow_other * nc, sizeof(T) * nc);
+    }
+
+    void set_row(int irow, T *input_array, int n_ele){
+        if (n_ele != nc) throw SetRowError();
+
+        memcpy(array + irow * nc, input_array, sizeof(T) * n_ele);
+    }
+
     void set_col(int icol, Mat<T> &other){
         if (nr != other.size()) throw SetColumnError();
 
@@ -201,12 +232,12 @@ public:
         }
     }
 
-    Mat<T> operator[](int irow){
-        // get the i-th row which shareds memory with the i-th row in the original matrix
-        if (irow < 0 || irow >= nr) throw IndexOutOfBound();
+    void set_col(int icol, T *input_array, int n_ele){
+        if (nr != n_ele) throw SetColumnError();
 
-        Mat<T> tmp(array + irow * nc, 1, nc);
-        return tmp;
+        for (int i = 0; i < other.nr; ++i){
+            array[i * nc + icol] = input_array[i];
+        }
     }
 
     void print(){
@@ -244,44 +275,44 @@ Mat<float> zeros(Mat<float> &matrix){
 
 }
 
-//#endif //MULTILEVEL_STRESS_C___MATRIX_HPP
+#endif //MULTILEVEL_STRESS_C___MATRIX_HPP
 
 
-int main(){
-    //////////// Test Mat class /////////////
-//    mat::Mat<float> a(3, 4);
-//    mat::Mat<float> b(3, 4);
-//    mat::random(a);
-//    sleep(2);
-//    mat::random(b);
-////    std::cout << a;
+//int main(){
+//    //////////// Test Mat class /////////////
+////    mat::Mat<float> a(3, 4);
+////    mat::Mat<float> b(3, 4);
+////    mat::random(a);
+////    sleep(2);
+////    mat::random(b);
+//////    std::cout << a;
+////    a.print();
+////    b.print();
+////
+////    printf("a[2]\n");
+//////    a[2].print();
+////    printf("a[2]*2\n");
+////    mat::Mat<float> tmpx;
+////    tmpx = a[2] * 2;
+//////    printf("%d %d\n", tmpx.nr, tmpx.nc);
+////    (a[1] * b[1]).print();
+////    (a / b).print();
+//    mat::Mat<int> a(3, 4);
+//    mat::Mat<int> b(3, 3);
+//    for (int i = 1; i <= 12; ++i){
+//        a.array[i - 1] = i;
+//    }
+//    for (int i = 1; i <= 30; ++i){
+//        b.array[i - 1] = i;
+//    }
 //    a.print();
 //    b.print();
+////    (a.mm(b)).print();
 //
-//    printf("a[2]\n");
-////    a[2].print();
-//    printf("a[2]*2\n");
-//    mat::Mat<float> tmpx;
-//    tmpx = a[2] * 2;
-////    printf("%d %d\n", tmpx.nr, tmpx.nc);
-//    (a[1] * b[1]).print();
-//    (a / b).print();
-    mat::Mat<int> a(3, 4);
-    mat::Mat<int> b(3, 3);
-    for (int i = 1; i <= 12; ++i){
-        a.array[i - 1] = i;
-    }
-    for (int i = 1; i <= 30; ++i){
-        b.array[i - 1] = i;
-    }
-    a.print();
-    b.print();
-//    (a.mm(b)).print();
-
-//    a.set_col(1, b, 2);
-    mat::Mat<int> tmp;
-    tmp = b[2];
-    a.set_col(1, tmp);
-    a.print();
-    return 0;
-}
+////    a.set_col(1, b, 2);
+//    mat::Mat<int> tmp;
+//    tmp = b[2];
+//    a.set_col(1, tmp);
+//    a.print();
+//    return 0;
+//}

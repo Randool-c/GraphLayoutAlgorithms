@@ -36,4 +36,11 @@ public:
     }
 };
 
+class SetRowError: public std::exception{
+public:
+    const char *what() const noexcept override {
+        return "Error! Input vector should have the same size with the number of columns of the target matrix\n";
+    }
+};
+
 #endif //MULTILEVEL_STRESS_C___CUSTOM_EXCEPTIONS_HPP

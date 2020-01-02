@@ -8,6 +8,7 @@
 #include<iostream>
 #include<memory.h>
 #include<cstdlib>
+#include<unordered_map>
 using namespace std;
 
 int POS_INT_INF = 0x7f800000;
@@ -44,21 +45,38 @@ int f(int i, int j){
     return i + j;
 }
 
-int main(){
-//    int a = 1;
-//    int *b = &a;
-//    cout << f(2, 2) << endl;
-    float a = 101001012913.12312;
-    float d = 1.00001020120301231231239123120312;
-    float q = 0.000000000000000000000000000000000000000112;
-    float u = 0.0;
-    double x[5] = {1.0};
-    memset(x, 0, sizeof(double) * 5);
-    x[2] += 1.12;
-    for (double num : x){
-        cout << num << endl;
+class TestArrayClass{
+public:
+    int *a;
+    TestArrayClass(){
+        a = new int[2];
+        a[0] = 1;
+        a[1] = 2;
     }
-//    cout << (d / 0.0) << endl;
-//    cout << INT32_MAX << endl;
+    int &operator[](int idx){
+        return a[idx];
+    }
+};
+
+int main(){
+//    vector<int> a;
+//    a.resize(10);
+//    a.push_back(10101);
+//    cout << a[10] << ' ' << a[0] << endl;
+//    vector<unordered_map<int, int>> a(2);
+//    vector<unordered_map<int, int>> b(3);
+//    a[0].insert(make_pair(10, 10));
+//    b[0].insert(make_pair(101, 101));
+//    cout << a[0][10] << ' ' << b[0][101] << endl << endl;
+//
+//    a = b;
+//    cout << a.size() << endl << endl;
+//    cout << a[0][10] << ' ' << a[0][292] << ' ' << a[0][101] << endl;
+//    a[0][101] = 1001010101;
+//    cout << a[0][101] << ' ' << b[0][101] << endl;
+    TestArrayClass a;
+    cout << a[1] << endl;
+    a[1] = 101010;
+    cout << a[1] << endl;
     return 0;
 }
