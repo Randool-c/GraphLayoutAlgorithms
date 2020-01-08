@@ -73,7 +73,13 @@ namespace mat {
 
         void reshape(int newr, int newc);
 
+        float l2_norm();
+
         Mat operator[](int irow);
+
+        Mat operator^(int n);
+
+        Mat mm(const Mat &other);
 
         Mat get_row(int irow);
 
@@ -93,6 +99,7 @@ Mat operator*(float num, const Mat &m);
 Mat operator/(const Mat &m1, const Mat &m2);
 Mat operator/(const Mat &m, float num);
 Mat operator/(float num, const Mat m);
+Mat mm(const Mat &m1, const Mat &m2);
 
 void random(Mat &m);
 void zeros(Mat &m);

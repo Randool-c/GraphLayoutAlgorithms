@@ -17,7 +17,7 @@ struct dist_pair{
     }
 };
 
-mat::Mat dijkstra_single(int source, Graph &graph){
+inline mat::Mat dijkstra_single(int source, Graph &graph){
     int n_nodes = graph.n_nodes;
     int n_left = n_nodes;
 //    std::vector dist(n_nodes, `consts`::POS_INF);
@@ -52,7 +52,7 @@ mat::Mat dijkstra_single(int source, Graph &graph){
     return row;
 }
 
-void dijkstra(mat::Mat &dist, Graph &graph){
+inline void dijkstra(mat::Mat &dist, Graph &graph){
     int n_nodes = graph.n_nodes;
     int n_left;
 //    mat::Mat dist(n_nodes, n_nodes);
@@ -88,7 +88,7 @@ void dijkstra(mat::Mat &dist, Graph &graph){
     }
 }
 
-mat::Mat floyed(){
+inline mat::Mat floyed(){
 
 }
 

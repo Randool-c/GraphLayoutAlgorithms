@@ -112,6 +112,43 @@ namespace mat {
         return ans;
     }
 
+    Mat Mat::operator^(int n) {
+        Mat ans(nr, nc);
+        for (int i = 0; i < nr * nc; ++i){
+            ans.arr->array[i] = std::pow(arr->array[i], n);
+        }
+        return ans;
+    }
+
+    float Mat::l2_norm() {
+        float sum_square = 0;
+        for (int i = 0; i < nr * nc; ++i){
+            sum_square += arr->array[i] * arr->array[i];
+        }
+        return std::sqrt(sum_square);
+    }
+
+    Mat Mat::mm(const mat::Mat &other) {
+        if (nc != other.nr){
+            throw MatMultiplyError();
+        }
+        else{
+            Mat ans(nr, other.nc);
+//            memset(ans.arr->array, 0, sizeof(T) * nr * nc);
+            zeros(ans);
+            float tmp;
+            for (int i = 0; i < nr; ++i) {
+                for (int k = 0; k < nc; ++k) {
+                    tmp = arr->array[i * nc + k];
+                    for (int j = 0; j < other.nc; ++j) {
+                        ans.arr->array[i * other.nc + j] += tmp * other.arr->array[k * other.nc + j];
+                    }
+                }
+            }
+            return ans;
+        }
+    }
+
     Mat Mat::get_row(int irow) {
         if (row_outof_bound(irow)) throw IndexOutOfBound();
 
@@ -240,6 +277,25 @@ namespace mat {
     void arange(Mat &m, int start){
         for (int i = 0; i < m.size(); ++i){
             m.arr->array[i] = start + i;
+        }
+    }
+
+    Mat mm(Mat &m1, Mat &m2){
+        if (m1.nc != m2.nr){
+            throw MatMultiplyError();
+        }
+        else{
+            Mat ans(m1.nr, m2.nc);
+            zeros(ans);
+            for (int i = 0; i < m1.nr; ++i) {
+                for (int k = 0; k < m1.nc; ++k) {
+                    float tmp = m1.arr->array[i * m1.nc + k];
+                    for (int j = 0; j < m2.nc; ++j) {
+                        ans.arr->array[i * m2.nc + j] += tmp * m2.arr->array[k * m2.nc + j];
+                    }
+                }
+            }
+            return ans;
         }
     }
 }

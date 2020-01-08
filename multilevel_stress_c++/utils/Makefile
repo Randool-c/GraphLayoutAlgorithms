@@ -1,7 +1,7 @@
 #output: graph.o io.o consts.o test_io.o
 #	g++ graph.o test_io.o io.o consts.o -o output
-output: test_shortest_path.o matrix.o graph.o consts.o shortest_path.hpp
-	g++ test_shortest_path.o matrix.o graph.o consts.o -o output
+output: test_matrix.o matrix.o graph.o consts.o shortest_path.hpp
+	g++ test_matrix.o matrix.o graph.o consts.o -o output
 
 matrix.o: matrix.cpp
 	g++ -c matrix.cpp

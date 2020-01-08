@@ -28,14 +28,13 @@ mat::Mat copy(){
 
 int main(){
     mat::Mat a(3, 4);
-    mat::Mat b(3, 4);
+    mat::Mat b(4, 3);
     mat::Mat c;
     mat::arange(a);
     mat::arange(b);
+    c = a.mm(b);
     a.print();
     b.print();
-    c = ((a * b) - a) * b;
     c.print();
-    cout << c.arr->refer << endl;
     return 0;
 }
