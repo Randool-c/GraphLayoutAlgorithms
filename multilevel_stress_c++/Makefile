@@ -8,8 +8,11 @@
 #clean:
 #	-rm output matrix.o exceptions.o
 
-#output: test_matrix.o
-#	g++ test_matrix.o -o output
-#
-#test_matrix.o: test_matrix.cpp
-#	g++ -c test_matrix.cpp
+output: test_matrix.o
+	g++ test_matrix.o -o output
+
+test_matrix.o: test_matrix.cpp test/matrix.hpp
+	g++ -c test_matrix.cpp
+
+clean:
+	-rm output test_matrix.o

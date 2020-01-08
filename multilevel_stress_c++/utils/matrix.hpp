@@ -2,8 +2,8 @@
 // Created by chenst on 2019/12/31.
 //
 
-//#ifndef MULTILEVEL_STRESS_C___MATRIX_HPP
-//#define MULTILEVEL_STRESS_C___MATRIX_HPP
+#ifndef MULTILEVEL_STRESS_C___MATRIX_HPP
+#define MULTILEVEL_STRESS_C___MATRIX_HPP
 
 #include<vector>
 #include<memory.h>
@@ -11,31 +11,28 @@
 #include<algorithm>
 #include<iostream>
 #include<ctime>
+#include<cstdio>
+#include<stdlib.h>
 #include <unistd.h>
+#include <cmath>
 
 #include"custom_exceptions.h"
 
-#ifndef MULTILEVEL_STRESS_C___MATRIX_HPP
-#define MULTILEVEL_STRESS_C___MATRIX_HPP
-
 namespace mat {
 
-//int TMP_POS_INT_INF = 0x7f800000;
-//int TMP_NEG_INT_INF = 0xff800000;
-//const float POS_INF = *((float*)&TMP_POS_INT_INF);
-//const float NEG_INF = *((float*)&TMP_NEG_INT_INF);
-//const float EPS = 1e-5;
-//const int INT
-
-/*
- * 实现时，取矩阵的某一行时，取出来的数据和原来的矩阵共享；但取列时，取出来的数据存在一个新的矩阵中，该矩阵和原矩阵没有关系
- * 保证Mat中的数据在内存中连续
- */
-template<typename T> class Mat {
+template<typename T=float> class Mat {
 public:
     int nr;
     int nc;
-    T *array;
+    class Array{
+        int reference;
+        T *array;
+
+        Array(){
+
+        }
+    };
+    Array *array;
 
     Mat(int n_r=1, int n_c=1): nr(n_r), nc(n_c) {
         array = (T *) malloc(sizeof(T) * n_r * n_c);
@@ -53,6 +50,24 @@ public:
         array = other.array;
     }
 
+    ~Mat(){
+
+    }
+
+    Mat<T> &operator=(Mat<T> const &other){
+        // 非赋值，而是存储的数据指向相同的内存地址
+        if (this != &other) {
+            nr = other.nr;
+            nc = other.nc;
+            if (array != other.array){
+                delete array;
+            }
+            array = other.array;
+        }
+        return *this;
+    }
+
+
     Mat<T> copy(){
         Mat<T> ans(nr, nc);
         for (int i = 0; i < nr * nc; ++i){
@@ -61,8 +76,8 @@ public:
         return ans;
     }
 
-    void free(){
-        free(array);
+    void free_mat(){
+        delete array;
     }
 
     int size(){
@@ -127,6 +142,22 @@ public:
         return ans;
     }
 
+    Mat<T> operator-(T other) const{
+        Mat<T> ans(nr, nc);
+        for (int i = 0; i < nr * nc; ++i){
+            ans.array[i] = other - array[i];
+        }
+        return ans;
+    }
+
+    Mat<T> operator-() const {
+        Mat<T> ans(nr, nc);
+        for (int i = 0; i < nr * nc; ++i){
+            ans.array[i] = -array[i];
+        }
+        return ans;
+    }
+
     Mat<T> operator/(Mat<T> const &other) const{
         if (nc != other.nc || nr != other.nr){
             throw ShapeNotMatch();
@@ -135,6 +166,23 @@ public:
         Mat<T> ans(nr, nc);
         for (int i = 0; i < nr * nc; ++i){
             ans.array[i] = array[i] / other.array[i];
+        }
+        return ans;
+    }
+
+    Mat<T> square() const{
+        Mat<T> ans(nr, nc);
+        for (int i = 0; i < nr * nc; ++i){
+            ans.array[i] = array[i] * array[i];
+        }
+        return ans;
+    }
+
+    Mat<T> reciprocal() const{
+        // 计算 1 / x
+        Mat<T> ans(nr, nc);
+        for (int i = 0; i < nr * nc; ++i){
+            ans.array[i] = 1 / array[i];
         }
         return ans;
     }
@@ -156,15 +204,6 @@ public:
             }
             return ans;
         }
-    }
-
-    Mat<T> &operator=(Mat<T> const &other){
-        if (this != &other) {
-            nr = other.nr;
-            nc = other.nc;
-            array = other.array;
-        }
-        return *this;
     }
 
     Mat<T> get_row(int irow){
@@ -235,8 +274,21 @@ public:
     void set_col(int icol, T *input_array, int n_ele){
         if (nr != n_ele) throw SetColumnError();
 
-        for (int i = 0; i < other.nr; ++i){
+        for (int i = 0; i < n_ele; ++i){
             array[i * nc + icol] = input_array[i];
+        }
+    }
+
+    float l2_norm(){
+        if (nc != 1 && nr != 1){
+            throw ShapeNotMatch();
+        }
+        else{
+            float ans = 0;
+            for (int i = 0; i < nr * nc; ++i){
+                ans += array[i] * array[i];
+            }
+            return std::sqrt(ans);
         }
     }
 
@@ -262,57 +314,37 @@ std::ostream &operator<<(std::ostream &os, const Mat<T> &m){
     }
 }
 
-void random(Mat<float> &matrix){
+inline void random(Mat<float> &matrix){
     srand(static_cast<unsigned int>(time(NULL)));
     for (int i = 0; i < matrix.size(); ++i){
         matrix.array[i] = (float)(rand()) / RAND_MAX;
     }
 }
 
-Mat<float> zeros(Mat<float> &matrix){
-    memset(matrix.array, 0, sizeof(float) * matrix.size());
+template<typename T=float, typename T1=float>
+Mat<T> operator-(T1 num, Mat<T> &target){
+    Mat<T> ans(target.nr, target.nc);
+    for (int i = 0; i < target.size(); ++i){
+        ans.array[i] = num - target.array[i];
+    }
+    return ans;
 }
+
+template<typename T1, typename T2>
+Mat<T2> operator/(T1 num, Mat<T2> &target){
+    Mat<T2> ans(target.nr, target.nc);
+    for (int i = 0; i < target.size(); ++i){
+        ans.array[i] = num / target.array[i];
+    }
+    return ans;
+}
+
+template<typename T>
+Mat<T> zeros(Mat<T> &matrix){
+    memset(matrix.array, 0, sizeof(T) * matrix.size());
+}
+
 
 }
 
 #endif //MULTILEVEL_STRESS_C___MATRIX_HPP
-
-
-//int main(){
-//    //////////// Test Mat class /////////////
-////    mat::Mat<float> a(3, 4);
-////    mat::Mat<float> b(3, 4);
-////    mat::random(a);
-////    sleep(2);
-////    mat::random(b);
-//////    std::cout << a;
-////    a.print();
-////    b.print();
-////
-////    printf("a[2]\n");
-//////    a[2].print();
-////    printf("a[2]*2\n");
-////    mat::Mat<float> tmpx;
-////    tmpx = a[2] * 2;
-//////    printf("%d %d\n", tmpx.nr, tmpx.nc);
-////    (a[1] * b[1]).print();
-////    (a / b).print();
-//    mat::Mat<int> a(3, 4);
-//    mat::Mat<int> b(3, 3);
-//    for (int i = 1; i <= 12; ++i){
-//        a.array[i - 1] = i;
-//    }
-//    for (int i = 1; i <= 30; ++i){
-//        b.array[i - 1] = i;
-//    }
-//    a.print();
-//    b.print();
-////    (a.mm(b)).print();
-//
-////    a.set_col(1, b, 2);
-//    mat::Mat<int> tmp;
-//    tmp = b[2];
-//    a.set_col(1, tmp);
-//    a.print();
-//    return 0;
-//}
