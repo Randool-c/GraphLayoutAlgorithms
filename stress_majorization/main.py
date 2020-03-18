@@ -9,7 +9,7 @@ from . import cfg as settings
 from cfg import path
 from .conjugate_gradient import cg
 from data_io import read_data
-from lib import compute_stress, compute_lap_z
+# from lib import compute_stress, compute_lap_z
 
 from time import time
 
@@ -17,6 +17,7 @@ from time import time
 class Solver:
     def __init__(self, nodes, edges, target_dim=3):
         # self.graphlist = get_graph_list(nodes, edges)
+        print(nodes)
         self.lap, self.dist, self.weights = construct_laplacian(nodes, edges)
 
         # np.savetxt('lap.txt', self.lap)
@@ -26,19 +27,19 @@ class Solver:
         self.target_dim = target_dim
 
     def compute_stress(self, x):
-        # begin = time()
-        # stress = 0
-        # print(x)
-        # for i in range(self.n_nodes):
-        #     for j in range(self.n_nodes):
-        #         if i == j:
-        #             continue
-        #
-        #         stress_ij = (np.linalg.norm(x[i] - x[j]) / self.dist[i, j] - 1) ** 2
-        #         # print(stress_ij)
-        #
-        #         stress += stress_ij
-        stress = compute_stress.compute_stress_gpu(x.ravel(), self.dist.ravel(), self.n_nodes)
+        begin = time()
+        stress = 0
+        print(x)
+        for i in range(self.n_nodes):
+            for j in range(self.n_nodes):
+                if i == j:
+                    continue
+
+                stress_ij = (np.linalg.norm(x[i] - x[j]) / self.dist[i, j] - 1) ** 2
+                # print(stress_ij)
+
+                stress += stress_ij
+        # stress = compute_stress.compute_stress_gpu(x.ravel(), self.dist.ravel(), self.n_nodes)
         # print("cost {}".format(time() - begin))
         return stress
 
@@ -52,20 +53,20 @@ class Solver:
         return ans_x
 
     def compute_l_z(self, z):
-        # lap_z = np.zeros((self.n_nodes, self.n_nodes))
-        # for i in range(self.n_nodes):
-        #     sum_z = 0
-        #     for j in range(self.n_nodes):
-        #         if i == j:
-        #             continue
-        #
-        #         lap_z[i, j] = -self.delta[i, j] * (1 / np.linalg.norm(z[i] - z[j]))
-        #         if np.isnan(lap_z[i, j]):
-        #             lap_z[i, j] = 1
-        #         sum_z += lap_z[i, j]
-        #     lap_z[i, i] = -sum_z
-        lap_z = compute_lap_z.compute_lap_z_gpu(z.ravel(), self.delta.ravel(), self.n_nodes)
-        lap_z = np.array(lap_z, copy=False).reshape(self.n_nodes, self.n_nodes)
+        lap_z = np.zeros((self.n_nodes, self.n_nodes))
+        for i in range(self.n_nodes):
+            sum_z = 0
+            for j in range(self.n_nodes):
+                if i == j:
+                    continue
+
+                lap_z[i, j] = -self.delta[i, j] * (1 / np.linalg.norm(z[i] - z[j]))
+                if np.isnan(lap_z[i, j]):
+                    lap_z[i, j] = 1
+                sum_z += lap_z[i, j]
+            lap_z[i, i] = -sum_z
+        # lap_z = compute_lap_z.compute_lap_z_gpu(z.ravel(), self.delta.ravel(), self.n_nodes)
+        # lap_z = np.array(lap_z, copy=False).reshape(self.n_nodes, self.n_nodes)
         return lap_z
 
     def stress_optimize(self, initial_x):
