@@ -85,9 +85,9 @@ class Solver:
 
 
 def run_stress_model():
-    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'custom_dataset', 'custom_dataset.mtx'))
+    # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'custom_dataset', 'custom_dataset.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     n_nodes = len(nodes)
     dim = 2
