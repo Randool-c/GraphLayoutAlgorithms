@@ -16,7 +16,6 @@ namespace fast {
 //    vector<int> nearest_center(shortest_from_center.nc);
         std::fill(nearest_center.begin(), nearest_center.end(), init_node);
 
-        std::cout << "kcenter over " << std::endl;
         int far_node;
         for (int i = 0; i < k - 1; ++i) {
             far_node = shortest_from_center.argmax().item();
@@ -29,8 +28,6 @@ namespace fast {
                 }
             }
         }
-        std::cout << "k value " << k << std::endl;
-        std::cout << "kcenter processing over" << std::endl;
     }
 
     void generate_k_list(std::vector<int> &k_list, int n_nodes, int ratio, int th) {
@@ -61,15 +58,13 @@ namespace fast {
             std::cout << k << std::endl;
             centers.clear();
             kcenter(centers, nearest_center, k, all_pair_dist);
-            std::cout << "center number" << centers.size() << std::endl;
+
             std::set<int> centers_set(centers.begin(), centers.end());
             center_dist = all_pair_dist(centers, centers);
-            std::cout << center_dist.nr << "  " << center_dist.nc << std::endl;
-//            center_dist.print();
+
             optimizer->initialize(center_dist, target_dim);
             center_x = initial_x.get_rows(centers);
-            optimizer->optimize(center_x);
-            std::cout << "setting rows" << std::endl;
+            center_x = optimizer->optimize(center_x);
             initial_x.set_rows(centers, center_x);
 
             for (int i = 0; i < n_nodes; ++i){
@@ -79,8 +74,6 @@ namespace fast {
                 }
             }
         }
-
-        std::cout << "over" << std::endl;
         return initial_x;
     }
 }

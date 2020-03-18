@@ -46,6 +46,18 @@ void Graph::resize(int nnodes, int nedges) {
     edges.resize(nedges);
 }
 
+void Graph::save(const std::string path) {
+    freopen((char*)path.data(), "w", stdout);
+    for (int i = 0; i < n_nodes; ++i){
+        for (std::unordered_map<int, float>::iterator it = edges[i].begin(); it != edges[i].end(); ++it){
+            if (i < it->first){
+                std::cout << i << ' ' << it->first << '\n';
+            }
+        }
+    }
+    fclose(stdout);
+}
+
 //void Graph::print() {
 //    std::cout << "hello world" << std::endl;
 //}

@@ -78,7 +78,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
      * solve the linear system Ax=b
      */
 
-    float th = 1e-3;
+    float th = 1e-2;
     mat::Mat r = b - A.mm(x);
     mat::Mat p = r;
     float r_at_r = r.dot(r);
@@ -133,7 +133,7 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
 }
 
 mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
-    float th = 1e-3;
+    float th = 1e-2;
 
     mat::Mat lap_z(n_nodes, n_nodes);
     mat::Mat z = initial_x;
@@ -152,5 +152,4 @@ mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
     return x;
 }
 
-StressOptimizer::~StressOptimizer() {
-}
+StressOptimizer::~StressOptimizer() { }

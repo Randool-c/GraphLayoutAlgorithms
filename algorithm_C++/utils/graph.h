@@ -34,6 +34,7 @@ public:
     bool exist_node(std::string node_name);
     void insert_edge(std::string src, std::string dst, float dist=1.0);
     void weight_edge_len();
+    void save(const std::string path);
 //    Mat get_laplacian(){}
 //    Mat get_shortest_path(){}
 };

@@ -38,7 +38,12 @@ int main(){
     vector<int> y = {2,4};
     a.print();
     mat::Mat b = a(x, y);
-    cout << "yes " << endl;
     b.print();
+
+    mat::Mat filled = mat::zeros(2, 5);
+    vector<int> idx = {4, 1};
+    a.set_rows(idx, filled);
+    a.print();
+
     return 0;
 }
