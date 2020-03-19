@@ -12,7 +12,7 @@ public:
     virtual ~BaseOptimizer() {}
     virtual mat::Mat optimize(mat::Mat &initial_x) {}
     virtual void initialize(mat::Mat, int) {}
-    virtual float compute_stress(const mat::Mat&) {}
+//    virtual float compute_stress(const mat::Mat&) {}
 };
 
 #endif //MULTILEVEL_STRESS_C___BASECLASS_H

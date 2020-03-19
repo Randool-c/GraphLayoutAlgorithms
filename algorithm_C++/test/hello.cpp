@@ -4,6 +4,7 @@
 
 #include"testclass.h"
 #include<iostream>
+#include<algorithm>
 
 int main(){
     testclass tmp();

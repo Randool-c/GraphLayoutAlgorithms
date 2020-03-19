@@ -508,6 +508,7 @@ namespace mat {
         for (int i = 0; i < ans.size(); ++i){
             ans.arr->array[i] = (float)(rand()) / RAND_MAX;
         }
+        ans.get_row(0).print();
         return ans;
     }
 

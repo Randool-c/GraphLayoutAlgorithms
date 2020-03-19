@@ -6,11 +6,12 @@
 #include "utils/graph.h"
 #include "utils/shortest_path.hpp"
 #include "multiscale/fast.h"
+#include "layout/sgd/sgd.h"
 #include <string>
 #include <ctime>
 using namespace std;
 
-const string datasetname = "1138_bus";
+const string datasetname = "dw256A";
 
 
 void run_multilevel(){
@@ -26,9 +27,9 @@ void run_multilevel(){
 //    StressOptimizer optimizer(dist, target_dim);
 //    mat::Mat initial_x = mat::random(graph.n_nodes, target_dim);
 //    mat::Mat ans_x = optimizer.optimize(initial_x);
-//    ans_x.save("output.txt");
-//    graph.save("edges.txt");
-//    delete optimizer;
+    ans_x.save("output.txt");
+    graph.save("edges.txt");
+    delete optimizer;
 }
 
 void run_layout(){
@@ -39,11 +40,11 @@ void run_layout(){
 
     mat::Mat dist = mat::empty(n_nodes, n_nodes);
     shortest_path::dijkstra(dist, graph);
-    StressOptimizer optimizer(dist, target_dim);
+    SGDOptimizer optimizer(dist, target_dim);
     mat::Mat initial_x = mat::random(graph.n_nodes, target_dim);
     mat::Mat ans_x = optimizer.optimize(initial_x);
-//    ans_x.save("output.txt");
-//    graph.save("edges.txt");
+    ans_x.save("output.txt");
+    graph.save("edges.txt");
 }
 
 int main() {

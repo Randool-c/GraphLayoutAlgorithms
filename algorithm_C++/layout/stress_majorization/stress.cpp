@@ -1,4 +1,6 @@
 #include "stress.h"
+#define scout std::cout
+#define sendl std::endl
 
 StressOptimizer::StressOptimizer() {
 
@@ -78,7 +80,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
      * solve the linear system Ax=b
      */
 
-    float th = 1e-2;
+    float th = 1e-3;
     mat::Mat r = b - A.mm(x);
     mat::Mat p = r;
     float r_at_r = r.dot(r);
@@ -94,6 +96,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
         x = x + alpha * p;
         newr = r - alpha * A_at_p;
 
+        scout << "norm " << newr.l2_norm() << sendl;
         if (newr.l2_norm() < th) break;
 
         newr_at_newr = newr.dot(newr);
@@ -119,6 +122,7 @@ float StressOptimizer::compute_stress(const mat::Mat &x) {
 }
 
 mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
+    std::cout << "hahha " << std::endl;
     construct_lap_z(lap_z, z);
     mat::Mat x;
     mat::Mat b;
@@ -133,12 +137,13 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
 }
 
 mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
-    float th = 1e-2;
+    float th = 1e-3;
 
     mat::Mat lap_z(n_nodes, n_nodes);
     mat::Mat z = initial_x;
     mat::Mat x = stress_optimize_iter(lap_z, z);
 
+    std::cout << "computing stress error " << std::endl;
     float stress_z = compute_stress(z);
     float stress_x = compute_stress(x);
     std::cout << stress_z << " " << stress_x << std::endl;

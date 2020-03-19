@@ -24,4 +24,4 @@ test_matrix.o: test_matrix.cpp matrix.hpp
 	g++ -c test_matrix.cpp
 
 clean:
-	-rm test_io.o graph.o output consts.o io.o
+	-rm test_io.o graph.o output consts.o io.o sgd.o

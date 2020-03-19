@@ -1,5 +1,5 @@
-output: main.o io.o graph.o matrix.o stress.o consts.o fast.o
-	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o -o output
+output: main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o
+	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o -o output
 
 main.o: main.cpp layout utils/io.h utils/graph.h utils/matrix.h
 	g++ -c main.cpp
@@ -23,6 +23,9 @@ consts.o: utils/consts.cpp utils/consts.h
 fast.o: multiscale/fast.h
 	g++ -c multiscale/fast.cpp
 
+sgd.o: layout/sgd/sgd.h
+	g++ -c layout/sgd/sgd.cpp
+
 .PHONY: clean
 clean:
-	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o
+	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o sgd.o
