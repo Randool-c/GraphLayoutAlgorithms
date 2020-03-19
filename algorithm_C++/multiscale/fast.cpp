@@ -58,16 +58,16 @@ namespace fast {
             std::cout << k << std::endl;
             centers.clear();
             kcenter(centers, nearest_center, k, all_pair_dist);
-            std::cout << "cente rnumber " << centers.size() << std::endl;
+//            std::cout << "cente rnumber " << centers.size() << std::endl;
 
             std::set<int> centers_set(centers.begin(), centers.end());
             center_dist = all_pair_dist(centers, centers);
 
-            std::cout << "initializing " << std::endl;
+//            std::cout << "initializing " << std::endl;
             optimizer->initialize(center_dist, target_dim);
-            std::cout << "initialized " << std::endl;
+//            std::cout << "initialized " << std::endl;
             center_x = initial_x.get_rows(centers);
-            std::cout << "optimizing  " << std::endl;
+//            std::cout << "optimizing  " << std::endl;
             center_x = optimizer->optimize(center_x);
             initial_x.set_rows(centers, center_x);
 

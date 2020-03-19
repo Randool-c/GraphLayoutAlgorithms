@@ -17,7 +17,6 @@ void Graph::insert_node(std::string node_name){
         node_name_to_idx[node_name] = node_cnt;
         nodes[node_cnt] = node_name;
         node_cnt += 1;
-//        nodes.push_back(node_name);
     }
 }
 
@@ -30,8 +29,10 @@ void Graph::insert_edge(std::string src, std::string dst, float dist){
     insert_node(dst);
     int src_idx = node_name_to_idx[src];
     int dst_idx = node_name_to_idx[dst];
+//    std::cout << src_idx << ' ' << dst_idx << std::endl;
     edges[src_idx][dst_idx] = dist;
     edges[dst_idx][src_idx] = dist;
+//    std::cout << "interersiting " << std::endl;
 }
 
 void Graph::weight_edge_len(){
@@ -43,43 +44,58 @@ void Graph::resize(int nnodes, int nedges) {
     n_edges = nedges;
     node_cnt = 0;
     nodes.resize(nnodes);
-    edges.resize(nedges);
+    edges.resize(nnodes);
 }
 
 void Graph::save(const std::string path) {
-    freopen((char*)path.data(), "w", stdout);
+//    freopen((char*)path.data(), "w", stdout);
+    std::ofstream fout((char*)path.data(), std::ios::out);
     for (int i = 0; i < n_nodes; ++i){
         for (std::unordered_map<int, float>::iterator it = edges[i].begin(); it != edges[i].end(); ++it){
             if (i < it->first){
-                std::cout << i << ' ' << it->first << '\n';
+                fout << i << ' ' << it->first << '\n';
             }
         }
     }
-    fclose(stdout);
 }
 
-//void Graph::print() {
-//    std::cout << "hello world" << std::endl;
-//}
+int Graph::get_root(std::vector<int> &parent, int idx){
+//    std::cout << "213 " << idx << ' ' << parent[idx] << " " << parent[1] << std::endl;
+    if (parent[idx] < 0){
+        return idx;
+    }
+    else return (parent[idx] = get_root(parent, parent[idx]));
+}
 
-//Mat Graph::get_laplacian(){
-//    mat::Mat<float> lap;
-//    mat::zeros(lap);
-//    int sum_row;
-//    int idx;dc ..
-//    exit
-//    for (int i = 0; i < n_nodes; ++i){
-//        sum_row = 0;
-//        for (int j = 0; j < n_nodes; ++j){
-//            if (i == j) continue;
-//            idx = i * n_nodes + j;
-//            if (edges[i].find(j) != edges[i].end()){
-//                sum_row += edges[i][j];
-//                lap(i, j) = -edges[i][j]
-//                lap(j, i) = -edges[i][j];
-//            }
-//        }
-//        lap(i, i) = sum_row;
-//    }
-//    return lap;
-//}
+void Graph::merge(std::vector<int> &parent, int root1, int root2){
+    if (parent[root1] < parent[root2]){  // root1节点更多
+        parent[root1] += parent[root2];
+        parent[root2] = root1;
+    }
+    else{   // root2节点更多
+        parent[root2] += parent[root1];
+        parent[root1] = root2;
+    }
+}
+
+bool Graph::check_connected() {
+    std::vector<int> parent(n_nodes);
+    std::fill(parent.begin(), parent.end(), -1);
+//    std::cout << parent[0] << parent[1] << std::endl;
+    int nc = n_nodes;
+    int src, dst;
+    int rootsrc, rootdst;
+    for (src = 0; src < n_nodes; ++src){
+        for (std::unordered_map<int, float>::iterator it = edges[src].begin(); it != edges[src].end(); ++it){
+            dst = it->first;
+            rootsrc = get_root(parent, src);
+            rootdst = get_root(parent, dst);
+            if (rootsrc != rootdst){
+                --nc;
+                merge(parent, rootsrc, rootdst);
+            }
+        }
+    }
+    std::cout << "connected components: " << nc << std::endl;
+    return nc == 1;
+}

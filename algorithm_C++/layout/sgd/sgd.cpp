@@ -68,7 +68,7 @@ float SGDOptimizer::optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>
     int src, dst;
     float w_ij, d_ij, mu, dx, dy, mag, delta, r, r_x, r_y;
     float max_delta = 0;
-    for (std::pair<int, int> p : all_pairs){
+    for (std::pair<int, int> &p : all_pairs){
         src = p.first;
         dst = p.second;
 //    for (int i = 0; i < all_pairs.size(); ++i){
@@ -89,13 +89,13 @@ float SGDOptimizer::optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>
         r = delta / mag;
         r_x = r * dx;
         r_y = r * dy;
-        pos(src, 0) -= r_x;
-        pos(src, 1) -= r_y;
-        pos(dst, 0) += r_x;
-        pos(dst, 1) += r_y;
+        pos(src, 0) = pos(src, 0) - r_x;
+        pos(src, 1) = pos(src, 1) - r_y;
+        pos(dst, 0) = pos(dst, 0) + r_x;
+        pos(dst, 1) = pos(dst, 1) + r_y;
     }
-    std::cout << max_delta << std::endl;
-    std::cout << "stress: " << compute_stress(pos) << std::endl;
+//    std::cout << max_delta << std::endl;
+//    std::cout << "stress: " << compute_stress(pos) << std::endl;
     return max_delta;
 }
 
@@ -116,6 +116,7 @@ mat::Mat SGDOptimizer::optimize(mat::Mat &initial_x) {
     float max_delta;
     for (float eta : etas){
         max_delta = optimize_iter(initial_x, all_pairs, eta);
+        std::cout << "stress: " << compute_stress(initial_x) << " max delta: " << max_delta << std::endl;
         if (max_delta < stop_th) break;
     }
     return initial_x;

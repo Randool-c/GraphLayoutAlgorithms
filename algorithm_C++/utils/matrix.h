@@ -10,6 +10,7 @@
 #include<cstdlib>
 #include<algorithm>
 #include<iostream>
+#include<fstream>
 #include<ctime>
 #include<cstdio>
 #include<stdlib.h>

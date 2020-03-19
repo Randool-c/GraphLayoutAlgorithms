@@ -8,6 +8,9 @@
 #include<vector>
 #include<string>
 #include<cstdio>
+#include<sstream>
+#include<iostream>
+#include<fstream>
 #include"consts.h"
 #include"graph.h"
 

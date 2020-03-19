@@ -12,6 +12,7 @@
 #include<queue>
 #include<string>
 #include<cmath>
+#include<utility>
 using namespace std;
 
 int POS_INT_INF = 0x7f800000;
@@ -40,9 +41,21 @@ void testfun(int &b){
     b = 123;
 }
 
+void printv(vector<pair<int, int>> &v){
+    for (int i = 0; i < v.size(); ++i){
+        printf(" (%d, %d) ", v[i].first, v[i].second);
+    }
+    printf("\n");
+}
+
 int main(){
-    int a = 1;
-    testfun(a);
-    cout << a << endl;
+    vector<pair<int, int>> v;
+    for (int i = 0; i < 10; ++i){
+        v.push_back(make_pair(i, i * 2));
+    }
+    for (int i = 0; i < 4; ++i){
+        random_shuffle(v.begin(), v.end());
+        printv(v);
+    }
     return 0;
 }

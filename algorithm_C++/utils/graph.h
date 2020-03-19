@@ -10,6 +10,7 @@
 #include<unordered_map>
 #include<string>
 #include<iostream>
+#include<fstream>
 #include"matrix.h"
 
 class Graph{
@@ -24,7 +25,7 @@ public:
     Graph(): n_nodes(0), n_edges(0), node_cnt(0){}
     Graph(int nnodes, int nedges): n_nodes(nnodes), n_edges(nedges){
         nodes.resize(nnodes);
-        edges.resize(nedges);
+        edges.resize(nnodes);
         node_cnt = 0;
     }
     Graph(Graph &);
@@ -37,6 +38,9 @@ public:
     void save(const std::string path);
 //    Mat get_laplacian(){}
 //    Mat get_shortest_path(){}
+    bool check_connected();
+    int get_root(std::vector<int> &parent, int);
+    void merge(std::vector<int>&, int, int);
 };
 
 #endif //MULTILEVEL_STRESS_C___GRAPH_H
