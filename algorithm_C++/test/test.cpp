@@ -13,6 +13,9 @@
 #include<string>
 #include<cmath>
 #include<utility>
+#include<set>
+#include<map>
+#include<string>
 using namespace std;
 
 int POS_INT_INF = 0x7f800000;
@@ -37,8 +40,8 @@ const float NEG_INF = *((float*)&NEG_INT_INF);
 //    return tmp;
 //}
 
-void testfun(int &b){
-    b = 123;
+void testfun(vector<string> &x){
+    cout << x[0] << endl;
 }
 
 void printv(vector<pair<int, int>> &v){
@@ -49,13 +52,9 @@ void printv(vector<pair<int, int>> &v){
 }
 
 int main(){
-    vector<pair<int, int>> v;
-    for (int i = 0; i < 10; ++i){
-        v.push_back(make_pair(i, i * 2));
-    }
-    for (int i = 0; i < 4; ++i){
-        random_shuffle(v.begin(), v.end());
-        printv(v);
-    }
+    vector<vector<int>> a;
+    vector<int> b = {2,1,3,3};
+    string c(123);
+    cout << c << endl;
     return 0;
 }

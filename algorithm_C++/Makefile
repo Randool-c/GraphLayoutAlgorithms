@@ -1,5 +1,5 @@
-output: main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o
-	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o -o output
+output: main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o
+	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o -o output
 
 main.o: main.cpp layout utils/io.h utils/graph.h utils/matrix.h
 	g++ -c main.cpp
@@ -9,6 +9,9 @@ io.o: utils/io.cpp utils/io.h
 
 graph.o: utils/graph.cpp utils/matrix.h utils/graph.h
 	g++ -c utils/graph.cpp
+
+disjoint_set.o: utils/disjoint_set.cpp utils/disjoint_set.h
+	g++ -c utils/disjoint_set.cpp
 
 matrix.o: utils/matrix.h utils/matrix.cpp utils/custom_exceptions.h
 	g++ -c utils/matrix.cpp
@@ -26,6 +29,9 @@ fast.o: multiscale/fast.h
 sgd.o: layout/sgd/sgd.h
 	g++ -c layout/sgd/sgd.cpp
 
+nicely.o: multiscale/nicely.h
+	g++ -c multiscale/nicely.cpp
+
 .PHONY: clean
 clean:
-	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o sgd.o
+	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o sgd.o disjoint_set.o nicely.o

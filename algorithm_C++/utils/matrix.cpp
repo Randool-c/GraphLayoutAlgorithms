@@ -284,7 +284,6 @@ namespace mat {
     }
 
     void Mat::save(const std::string &path) {
-//        freopen((char*)path.data(), "w", stdout);
         std::ofstream fout((char*)path.data(), std::ios::out);
         for (int i = 0; i < nr; ++i){
             for (int j = 0; j < nc; ++j){
@@ -293,8 +292,6 @@ namespace mat {
             fout << std::endl;
         }
         fout << std::endl;
-//        fclose(stdout);
-//        freopen("/dev/console", "w", stdout);
     }
 
     Mat Mat::argmin(int axis) {

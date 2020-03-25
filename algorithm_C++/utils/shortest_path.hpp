@@ -65,7 +65,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
 
     int nearest_node;
     int nearest_dist;
-    std::cout << graph.n_nodes << " nodes " << graph.n_edges << " edges " << std::endl;
+//    std::cout << graph.n_nodes << " nodes " << graph.n_edges << " edges " << std::endl;
     for (int source = 0; source < n_nodes; ++source){
         std::priority_queue<dist_pair, std::vector<dist_pair>, std::greater<dist_pair>> heap;
         std::vector<bool> flag(n_nodes, false);

@@ -28,6 +28,7 @@ public:
         edges.resize(nnodes);
         node_cnt = 0;
     }
+    Graph(std::vector<std::string> &nodes);
     Graph(Graph &);
     void resize(int nnodes, int nedges);
     void clear();

@@ -29,10 +29,8 @@ void Graph::insert_edge(std::string src, std::string dst, float dist){
     insert_node(dst);
     int src_idx = node_name_to_idx[src];
     int dst_idx = node_name_to_idx[dst];
-//    std::cout << src_idx << ' ' << dst_idx << std::endl;
     edges[src_idx][dst_idx] = dist;
     edges[dst_idx][src_idx] = dist;
-//    std::cout << "interersiting " << std::endl;
 }
 
 void Graph::weight_edge_len(){
@@ -60,7 +58,6 @@ void Graph::save(const std::string path) {
 }
 
 int Graph::get_root(std::vector<int> &parent, int idx){
-//    std::cout << "213 " << idx << ' ' << parent[idx] << " " << parent[1] << std::endl;
     if (parent[idx] < 0){
         return idx;
     }
@@ -81,7 +78,6 @@ void Graph::merge(std::vector<int> &parent, int root1, int root2){
 bool Graph::check_connected() {
     std::vector<int> parent(n_nodes);
     std::fill(parent.begin(), parent.end(), -1);
-//    std::cout << parent[0] << parent[1] << std::endl;
     int nc = n_nodes;
     int src, dst;
     int rootsrc, rootdst;

@@ -12,8 +12,7 @@ namespace fast {
         int n_nodes = shortest_dist.nr;
         centers.push_back(init_node);
         mat::Mat shortest_from_center = shortest_dist.get_row(init_node);
-//    mat::Mat nearest_center = mat::fill(1, shortest_from_center.nc, init_node);
-//    vector<int> nearest_center(shortest_from_center.nc);
+
         std::fill(nearest_center.begin(), nearest_center.end(), init_node);
 
         int far_node;
@@ -23,7 +22,6 @@ namespace fast {
             for (int j = 0; j < n_nodes; ++j) {
                 if (shortest_dist(j, far_node) < shortest_from_center(j)) {
                     shortest_from_center(j) = shortest_dist(j, far_node);
-//                nearest_center(j) = far_node;
                     nearest_center[j] = far_node;
                 }
             }
@@ -58,16 +56,12 @@ namespace fast {
             std::cout << k << std::endl;
             centers.clear();
             kcenter(centers, nearest_center, k, all_pair_dist);
-//            std::cout << "cente rnumber " << centers.size() << std::endl;
 
             std::set<int> centers_set(centers.begin(), centers.end());
             center_dist = all_pair_dist(centers, centers);
 
-//            std::cout << "initializing " << std::endl;
             optimizer->initialize(center_dist, target_dim);
-//            std::cout << "initialized " << std::endl;
             center_x = initial_x.get_rows(centers);
-//            std::cout << "optimizing  " << std::endl;
             center_x = optimizer->optimize(center_x);
             initial_x.set_rows(centers, center_x);
 
