@@ -1,5 +1,7 @@
-output: main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o maxmatch.o
-	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o maxmatch.o -o output
+output: main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o maxmatch.o \
+	weighted_interpolation.o
+	g++ main.o io.o graph.o matrix.o stress.o consts.o fast.o sgd.o disjoint_set.o nicely.o maxmatch.o weighted_interpolation.o \
+		-o output
 
 main.o: main.cpp layout utils/io.h utils/graph.h utils/matrix.h
 	g++ -c main.cpp
@@ -35,6 +37,10 @@ nicely.o: multiscale/nicely.h
 maxmatch.o: multiscale/maxmatch.h
 	g++ -c multiscale/maxmatch.cpp
 
+weighted_interpolation.o: multiscale/weighted_interpolation.h
+	g++ -c multiscale/weighted_interpolation.cpp
+
 .PHONY: clean
 clean:
-	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o sgd.o disjoint_set.o nicely.o maxmatch.o
+	-rm main.o io.o graph.o matrix.o stress.o consts.o output fast.o sgd.o disjoint_set.o nicely.o maxmatch.o \
+		weighted_interpolation.o

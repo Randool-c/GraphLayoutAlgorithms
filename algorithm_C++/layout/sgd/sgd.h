@@ -25,8 +25,8 @@ public:
     int target_dim;
 
     SGDOptimizer();
-    SGDOptimizer(mat::Mat target_dist, int target_dim=2);
-    void initialize(mat::Mat target_dist, int target_dim);
+    SGDOptimizer(mat::Mat target_dist, int target_dim=2, mat::Mat *w=NULL);
+    void initialize(mat::Mat target_dist, int target_dim, mat::Mat *w=NULL);
     mat::Mat optimize(mat::Mat &initial_x);
     float optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>> &all_pairs, float);
     float compute_stress(mat::Mat x);

@@ -1,17 +1,15 @@
 #include "stress.h"
-#define scout std::cout
-#define sendl std::endl
 
 StressOptimizer::StressOptimizer() {
 
 }
 
-StressOptimizer::StressOptimizer(mat::Mat target_dist, int dim) {
-    initialize(target_dist, dim);
+StressOptimizer::StressOptimizer(mat::Mat target_dist, int dim, mat::Mat *w) {
+    initialize(target_dist, dim, w);
 }
 
 
-void StressOptimizer::initialize(mat::Mat target_dist, int dim) {
+void StressOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
     n_nodes = target_dist.nr;
 //    dist = mat::empty(n_nodes, n_nodes);
 //    weights = mat::empty(n_nodes, n_nodes);
@@ -20,7 +18,12 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim) {
 //    delta = dist * weights;  // 对角线元素为nan, 不可用
 //    target_dim = dim;
     dist = target_dist;
-    weights = 1 / (dist ^ 2);
+    if (w){
+        weights = *w;
+    }
+    else{
+        weights = 1 / (dist ^ 2);
+    }
 
 //    float tmp_sum = 0;
 //    for (int row_no = 0; row_no < n_nodes; ++row_no) {
@@ -58,7 +61,7 @@ void StressOptimizer::construct_lap_z(mat::Mat &lap_z, mat::Mat &z) {
         for (int j = 0; j < n_nodes; ++j){
             if (i == j) continue;
 
-            lap_z(i, j) = -delta(i, j) * (1 / (z[i] - z[j]).l2_norm());
+            lap_z(i, j) = -delta(i, j) * (1 / (z[i] - z[j] + 1e-5).l2_norm());
             sum_z -= lap_z(i, j);
         }
         lap_z(i, i) = sum_z;
@@ -70,7 +73,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
      * solve the linear system Ax=b
      */
 
-    float th = 1e-3;
+    float th = 1e-2;
     mat::Mat r = b - A.mm(x);
     mat::Mat p = r;
     float r_at_r = r.dot(r);
@@ -78,15 +81,21 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
     mat::Mat A_at_p;
     float alpha;
     mat::Mat newr;
-    float newr_at_newr;
+    float newr_at_newr = 0;
     float beta;
+//    A.save("A.txt");
+//    b.print();
+//    r.save("r.txt");
+//    b.save("b1.txt");
+//    x.save("x.txt");
+//    std::cout << r_at_r << " r_at_r " << std::endl;
     while (1){
         A_at_p = A.mm(p);
         alpha = r_at_r / (p.dot(A_at_p));
         x = x + alpha * p;
         newr = r - alpha * A_at_p;
 
-//        scout << "norm " << newr.l2_norm() << sendl;
+//        std::cout << "norm " << newr.l2_norm() << std::endl;
         if (newr.l2_norm() < th) break;
 
         newr_at_newr = newr.dot(newr);
@@ -119,7 +128,9 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
     mat::Mat ans_x(n_nodes, target_dim);
     for (int i = 0; i < target_dim; ++i){
         x = z.get_col(i);
+        lap_z.save("lap_z.txt");
         b = lap_z.mm(x);
+        b.save("b.txt");
         cg(lap, x, b);
         ans_x.set_col(i, x);
     }
@@ -127,7 +138,7 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
 }
 
 mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
-    float th = 1e-3;
+    float th = 1e-2;
 
     mat::Mat lap_z(n_nodes, n_nodes);
     mat::Mat z = initial_x;

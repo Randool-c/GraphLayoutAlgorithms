@@ -7,14 +7,20 @@
 
 SGDOptimizer::SGDOptimizer() {}
 
-SGDOptimizer::SGDOptimizer(mat::Mat target_dist, int target_dim) {
-    initialize(target_dist, target_dim);
+SGDOptimizer::SGDOptimizer(mat::Mat target_dist, int target_dim, mat::Mat *w) {
+    initialize(target_dist, target_dim, w);
 }
 
-void SGDOptimizer::initialize(mat::Mat target_dist, int dim) {
+void SGDOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
     n_nodes = target_dist.nr;
     dist = target_dist;
-    weights = 1 / (dist ^ 2);
+    if (w){
+        weights = *w;
+    }
+    else{
+        weights = 1 / (dist ^ 2);
+    }
+//    weights = 1 / (dist ^ 2);
     target_dim = dim;
 }
 

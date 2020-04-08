@@ -26,8 +26,8 @@ public:
     int target_dim;
 
     StressOptimizer();
-    StressOptimizer(mat::Mat target_dist, int);
-    void initialize(mat::Mat, int);
+    StressOptimizer(mat::Mat target_dist, int, mat::Mat *w=NULL);
+    void initialize(mat::Mat, int, mat::Mat *w=NULL);
 //    void construct_laplacian(Graph &);
     void construct_lap_z(mat::Mat &dst_lap_z, mat::Mat &z);
     void operator()(mat::Mat &);

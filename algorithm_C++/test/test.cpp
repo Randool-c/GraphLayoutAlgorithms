@@ -52,7 +52,10 @@ void printv(vector<pair<int, int>> &v){
 }
 
 int main(){
-    int a = NULL;
-    cout << a << endl;
+    int *a = new int[10];
+    for (int i = 0; i < 10; ++i) a[i] = i * 2;
+    for (int x: a){
+        cout << x << endl;
+    }
     return 0;
 }
