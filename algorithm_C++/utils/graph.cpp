@@ -20,8 +20,19 @@ void Graph::insert_node(std::string node_name){
     }
 }
 
+void Graph::insert_node(int node_name) {
+    insert_node(std::to_string(node_name));
+}
+//void Graph::insert_node(int node_name) {
+//
+//}
+
 bool Graph::exist_node(std::string name){
     return node_name_to_idx.find(name) != node_name_to_idx.end();
+}
+
+bool Graph::exist_node(int node_idx) {
+    return node_idx < n_nodes;
 }
 
 void Graph::insert_edge(std::string src, std::string dst, float dist){
@@ -31,6 +42,40 @@ void Graph::insert_edge(std::string src, std::string dst, float dist){
     int dst_idx = node_name_to_idx[dst];
     edges[src_idx][dst_idx] = dist;
     edges[dst_idx][src_idx] = dist;
+}
+
+bool Graph::exist_edge(std::string src, std::string dst) {
+    int src_idx = node_name_to_idx[src];
+    int dst_idx = node_name_to_idx[dst];
+    return edges[src_idx].find(dst_idx) != edges[src_idx].end();
+}
+
+bool Graph::exist_edge(int src_idx, int dst_idx) {
+    /*
+     * src: source节点编号
+     * dst: target节点编号
+     */
+
+    return edges[src_idx].find(dst_idx) != edges[src_idx].end();
+}
+
+void Graph::insert_edge(int src, int dst, float dist) {
+    /*
+     * src, dst: 节点名字
+     */
+
+    insert_edge(std::to_string(src), std::to_string(dst), dist);
+}
+
+float Graph::get_edge_len(std::string src_name, std::string dst_name){
+    int src_idx = node_name_to_idx[src_name];
+    int dst_idx = node_name_to_idx[dst_name];
+    return get_edge_len(src_idx, dst_idx);
+}
+
+float Graph::get_edge_len(int src_idx, int dst_idx){
+    if (!exist_edge(src_idx, dst_idx)) throw EdgeNotExistError();
+    return edges[src_idx][dst_idx];
 }
 
 void Graph::weight_edge_len(){

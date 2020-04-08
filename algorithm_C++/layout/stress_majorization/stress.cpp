@@ -21,6 +21,18 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim) {
 //    target_dim = dim;
     dist = target_dist;
     weights = 1 / (dist ^ 2);
+
+//    float tmp_sum = 0;
+//    for (int row_no = 0; row_no < n_nodes; ++row_no) {
+//        tmp_sum = 0;
+//        for (int i = 0; i < n_nodes; ++i) {
+//            if (i == row_no) continue;
+//            tmp_sum += weights(row_no, i);
+//        }
+//        std::cout << tmp_sum << " ratio of a single 1 " << (1 / tmp_sum) << std::endl;
+//    }
+
+
     lap = weights.copy();
 
     float row_sum;
@@ -37,28 +49,6 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim) {
     delta = dist * weights;
     target_dim = dim;
 }
-
-
-//void StressOptimizer::construct_laplacian(Graph &graph){
-//    n_nodes = graph.n_nodes;
-////    std::cout << "enter" << std::endl;
-//    shortest_path::dijkstra(dist, graph);
-//
-//    weights = 1 / (dist ^ 2);
-//
-//    lap = weights.copy();
-//
-//    float row_sum;
-//    for (int i = 0; i < n_nodes; ++i){
-//        row_sum = 0;
-//        for (int j = 0; j < n_nodes; ++j){
-//            if (i == j) continue;
-//            row_sum += lap(i, j);
-//            lap(i, j) = -lap(i, j);
-//        }
-//        lap(i, i) = row_sum;
-//    }
-//}
 
 void StressOptimizer::construct_lap_z(mat::Mat &lap_z, mat::Mat &z) {
     mat::zeros(lap_z);

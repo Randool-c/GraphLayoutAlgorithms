@@ -52,9 +52,7 @@ void printv(vector<pair<int, int>> &v){
 }
 
 int main(){
-    vector<vector<int>> a;
-    vector<int> b = {2,1,3,3};
-    string c(123);
-    cout << c << endl;
+    int a = NULL;
+    cout << a << endl;
     return 0;
 }

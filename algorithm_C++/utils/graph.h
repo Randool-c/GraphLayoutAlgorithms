@@ -11,7 +11,17 @@
 #include<string>
 #include<iostream>
 #include<fstream>
+#include<string>
+#include<utility>
+#include<exception>
 #include"matrix.h"
+
+class EdgeNotExistError: public std::exception{
+public:
+    const char *what() const noexcept override {
+        return "Error! Target edge not exist\n";
+    }
+};
 
 class Graph{
 public:
@@ -33,8 +43,15 @@ public:
     void resize(int nnodes, int nedges);
     void clear();
     void insert_node(std::string node_name);
+    void insert_node(int node_name);
     bool exist_node(std::string node_name);
+    bool exist_node(int node_name);
     void insert_edge(std::string src, std::string dst, float dist=1.0);
+    void insert_edge(int src, int dst, float dist);
+    bool exist_edge(std::string src, std::string dst);
+    bool exist_edge(int src, int dst);
+    float get_edge_len(int, int);
+    float get_edge_len(std::string, std::string);
     void weight_edge_len();
     void save(const std::string path);
 //    Mat get_laplacian(){}
