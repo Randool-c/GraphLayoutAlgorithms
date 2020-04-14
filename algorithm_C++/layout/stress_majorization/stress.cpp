@@ -121,7 +121,6 @@ float StressOptimizer::compute_stress(const mat::Mat &x) {
 }
 
 mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
-//    std::cout << "hahha " << std::endl;
     construct_lap_z(lap_z, z);
     mat::Mat x;
     mat::Mat b;
