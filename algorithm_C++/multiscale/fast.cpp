@@ -51,7 +51,7 @@ namespace fast {
         std::vector<int> centers;
         std::vector<int> nearest_center(n_nodes);
         mat::Mat center_dist;
-        mat::Mat center_x;
+//        mat::Mat center_x;
         for (int k : k_list) {
             std::cout << k << std::endl;
             centers.clear();
@@ -61,7 +61,24 @@ namespace fast {
             center_dist = all_pair_dist(centers, centers);
 
             optimizer->initialize(center_dist, target_dim);
-            center_x = initial_x.get_rows(centers);
+//            center_x = initial_x.get_rows(centers);
+
+            mat::Mat center_x = mat::zeros(k, target_dim);
+            std::map<int, int> centeridx2subidx;
+            for (int i = 0; i < k; ++i){
+                centeridx2subidx[centers[i]] = i;
+            }
+            std::vector<int> sum_cnt(k);
+            for (int i = 0; i < n_nodes; ++i){
+                center_x(centeridx2subidx[nearest_center[i]], 0) += initial_x(i, 0);
+                center_x(centeridx2subidx[nearest_center[i]], 1) += initial_x(i, 1);
+                sum_cnt[centeridx2subidx[nearest_center[i]]]++;
+            }
+            for (int i = 0; i < k; ++i){
+                center_x(i, 0) /= sum_cnt[i];
+                center_x(i, 1) /= sum_cnt[i];
+            }
+
             center_x = optimizer->optimize(center_x);
             initial_x.set_rows(centers, center_x);
 

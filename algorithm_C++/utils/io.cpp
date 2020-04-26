@@ -10,12 +10,18 @@ void io::read_dataset(std::string dataset_name, Graph &graph){
     std::cout << path << std::endl;
     std::ifstream fin((char*)path.data(), std::ios::in);
 
-    fin.getline(buffer, 128);
+    do {
+        fin.getline(buffer, 128);
+    } while(buffer[0] == '%');
+
     int n_nodes, n_edges;
+    std::istringstream is(buffer);
+    is >> n_nodes >> n_nodes >> n_edges;
     std::string src, dst;
     std::string value;
-    fin >> n_nodes >> n_nodes >> n_edges;
-    fin.get();
+
+    std::cout << n_nodes << " " << n_edges << std::endl;
+
     graph.resize(n_nodes, n_edges);
     std::string line;
     for (int i = 0; i < n_edges; ++i){

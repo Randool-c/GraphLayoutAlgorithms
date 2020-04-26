@@ -16,6 +16,7 @@
 #include<set>
 #include<map>
 #include<string>
+#include<ctime>
 using namespace std;
 
 int POS_INT_INF = 0x7f800000;
@@ -40,6 +41,15 @@ const float NEG_INF = *((float*)&NEG_INT_INF);
 //    return tmp;
 //}
 
+struct dist_pair{
+    int target_center;
+    int dist;
+    dist_pair(int a, int b): target_center(a), dist(b) {}
+    bool operator<(const dist_pair &other) const{
+        return dist < other.dist;
+    }
+};
+
 void testfun(vector<string> &x){
     cout << x[0] << endl;
 }
@@ -52,10 +62,9 @@ void printv(vector<pair<int, int>> &v){
 }
 
 int main(){
-    int *a = new int[10];
-    for (int i = 0; i < 10; ++i) a[i] = i * 2;
-    for (int x: a){
-        cout << x << endl;
+    srand((unsigned)time(NULL));
+    for (int i = 0; i < 10; ++i){
+        cout << rand() % 50 << endl;
     }
     return 0;
 }

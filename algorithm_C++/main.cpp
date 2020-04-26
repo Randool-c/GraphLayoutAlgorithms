@@ -18,7 +18,11 @@
 #include <ctime>
 using namespace std;
 
+//const string datasetname = "bcspwr10";
+//const string datasetname = "dw256A";
+// const string datasetname = "crystk02";
 const string datasetname = "lshp2233";
+//const string datasetname = "1138_bus";
 
 
 void run_multilevel(){
@@ -29,7 +33,7 @@ void run_multilevel(){
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
     BaseOptimizer *optimizer = new StressOptimizer();
-    mat::Mat ans_x = weighted_interpolation::solve(optimizer, graph, target_dim);
+    mat::Mat ans_x = nicely::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");
     graph.save("edges.txt");
@@ -55,31 +59,38 @@ void run_layout(){
     graph.save("edges.txt");
 }
 
-int main(){
-    clock_t start_multiscale, end_multiscale;
-    clock_t start_layout, end_layout;
-    int t_multiscale, t_layout;
-
-    start_multiscale = clock();
-    run_multilevel();
-    end_multiscale = clock();
-    t_multiscale = end_multiscale - start_multiscale;
-
-    start_layout = clock();
-    run_layout();
-    end_layout = clock();
-    t_layout = end_layout - start_layout;
-
-    std::cout << "加上Multiscale算法后耗时：" << t_multiscale << std::endl;
-    std::cout << "直接进行布局耗时：" << t_layout << std::endl;
-}
-
-//int main() {
-//    clock_t start, end;
-//    start = clock();
-////    run_multilevel();
+//int main(){
+//    clock_t start_multiscale, end_multiscale;
+//    clock_t start_layout, end_layout;
+//    int t_multiscale, t_layout;
+//
+//    start_multiscale = clock();
+//    run_multilevel();
+//    end_multiscale = clock();
+//    t_multiscale = (float)(end_multiscale - start_multiscale) / CLOCKS_PER_SEC;
+//
+//    start_layout = clock();
 //    run_layout();
-//    end = clock();
-//    cout << "cost: " << end - start << endl;
-//    return 0;
+//    end_layout = clock();
+//    t_layout = (float)(end_layout - start_layout) / CLOCKS_PER_SEC;
+//
+//    std::cout << "加上Multiscale算法后耗时：" << t_multiscale << "秒" << std::endl;
+//    std::cout << "直接进行布局耗时：" << t_layout << "秒" << std::endl;
 //}
+
+int main() {
+    int test_times = 10;
+    float accu_seconds = 0;
+
+    for (int i = 0; i < test_times; ++i) {
+        clock_t start, end;
+        start = clock();
+        run_multilevel();
+//    run_layout();
+        end = clock();
+        cout << "cost: " << (float) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
+        accu_seconds += (float) (end - start) / CLOCKS_PER_SEC;
+    }
+    cout << "average cost: " << accu_seconds / test_times << endl;
+    return 0;
+}

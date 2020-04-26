@@ -7,11 +7,14 @@
 // #include<device_launch_parameters.h>
 #include<cstdio>
 #include<iostream>
+#include "test_device.h"
 using namespace std;
 
 
 __host__ __device__ int run_on_cpu_or_gpu(){
-    return 1;
+    int a = 123;
+    int b = 1010;
+    return a + b;
 }
 
 __global__ void run_on_gpu(){

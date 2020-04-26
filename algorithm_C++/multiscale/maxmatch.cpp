@@ -52,7 +52,6 @@ namespace maxmatch{
             mat::Mat dist = mat::empty(n_nodes, n_nodes);
             shortest_path::dijkstra(dist, graph);
 
-
             int subgraph_n_nodes = contracted.size();
             Graph subgraph(subgraph_n_nodes, 0);
             // 插入节点

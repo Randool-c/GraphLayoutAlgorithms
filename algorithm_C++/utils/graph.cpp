@@ -14,6 +14,7 @@ Graph::Graph(Graph &other){
 
 void Graph::insert_node(std::string node_name){
     if (!exist_node(node_name)){
+//        std::cout << "what is the fuck  " << node_name << ' ' << node_cnt << ' ' << n_nodes << std::endl;
         node_name_to_idx[node_name] = node_cnt;
         nodes[node_cnt] = node_name;
         node_cnt += 1;

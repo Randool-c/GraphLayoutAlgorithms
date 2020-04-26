@@ -20,7 +20,6 @@ void SGDOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
     else{
         weights = 1 / (dist ^ 2);
     }
-//    weights = 1 / (dist ^ 2);
     target_dim = dim;
 }
 
@@ -48,7 +47,7 @@ void SGDOptimizer::get_etas(std::vector<float> &etas, int t_max, int t_maxmax, f
         }
     }
     float eta_max = 1 / min_weight;
-    float eta_min = 1 / max_weight;
+    float eta_min = eps / max_weight;
     float l = std::log(eta_max / eta_min) / (t_max - 1);
 
     float eta_switch = 1 / max_weight;
@@ -77,9 +76,7 @@ float SGDOptimizer::optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>
     for (std::pair<int, int> &p : all_pairs){
         src = p.first;
         dst = p.second;
-//    for (int i = 0; i < all_pairs.size(); ++i){
-//        src = all_pairs[i].first;
-//        dst = all_pairs[i].second;
+
         w_ij = weights(src, dst);
         d_ij = dist(src, dst);
 

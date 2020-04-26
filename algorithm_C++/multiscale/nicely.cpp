@@ -11,8 +11,9 @@ namespace nicely{
          */
         int n = n_nodes;
         do {
-            k_list.push_back(n);
             n *= ratio;
+            k_list.push_back(n);
+//            n *= ratio;
         } while (n > th);
     }
 
@@ -24,6 +25,10 @@ namespace nicely{
         for(int target : neighbors[old_root]){
             neighbors[target].erase(old_root);
             neighbors[target].insert(new_root);
+//            if (target != new_root && target != old_root) {
+//                std::cout << "is root: " << (disjoint_set.get_root(target) == target) << ' '
+//                          << disjoint_set.parent[disjoint_set.get_root(target)] << std::endl;
+//            }
         }
         neighbors[new_root].insert(neighbors[old_root].begin(), neighbors[old_root].end());
         neighbors[new_root].erase(new_root);
@@ -32,6 +37,7 @@ namespace nicely{
 
     mat::Mat solve_r(BaseOptimizer *optimizer, Graph &graph, int target_dim, std::vector<int> &k_list, int k_idx){
         int n_nodes = graph.n_nodes;
+        std::cout << "coarsing nodes number: " << n_nodes << std::endl;
         if (k_idx == k_list.size()){  // 达到最简图，直接进行布局
             mat::Mat initial_pos = mat::random(n_nodes, target_dim);
             mat::Mat dist = mat::empty(n_nodes, n_nodes);
@@ -50,6 +56,7 @@ namespace nicely{
             // 初始化neighbors和所有边pair
             for (int i = 0; i < graph.edges.size(); ++i) {
                 for (auto &it : graph.edges[i]) {
+                    if (i == it.first) continue;
                     neighbors[i].insert(it.first);
                     if (i < it.first) {
                         all_edges.push_back(std::make_pair(i, it.first));
@@ -64,6 +71,7 @@ namespace nicely{
             std::vector<int> intersection_set;
             int cluster_score, degree_score, homotopic_score, score;
             while (disjoint_set.get_n_roots() > k) {
+//                std::cout << "n roots: " << disjoint_set.get_n_roots() << std::endl;
                 min_cost = POS_INF;
                 for (auto &pair : all_edges) {
                     rootsrc = disjoint_set.get_root(pair.first);
@@ -108,7 +116,9 @@ namespace nicely{
             }
             float weight;
             int src_idx, dst_idx;
+            std::cout << "here>? " << std::endl;
             for (int src : roots){
+                std::cout << "src: " << src << std::endl;
                 for (int dst : neighbors[src]){  // 确保src和dst都为根
                     if (src < dst){
                         weight = 0;
@@ -123,8 +133,10 @@ namespace nicely{
                 }
             }
 
+            std::cout << "refining " << std::endl;
             // 得到简化后的图的布局
             mat::Mat pos = solve_r(optimizer, contracted_graph, target_dim, k_list, k_idx + 1);
+            std::cout << "refining node number: " << n_nodes << std::endl;
             // 进行refine
             mat::Mat ans_pos = mat::empty(n_nodes, target_dim);
             ans_pos.set_rows(roots, pos);
