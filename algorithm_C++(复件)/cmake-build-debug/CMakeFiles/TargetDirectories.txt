@@ -1,2 +1,0 @@
-/home/chenst/projects/Vis/Main/algorithms/algorithm_C++(复件)/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/chenst/projects/Vis/Main/algorithms/algorithm_C++(复件)/cmake-build-debug/CMakeFiles/edit_cache.dir
