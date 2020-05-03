@@ -28,9 +28,9 @@ public:
     SGDOptimizer(mat::Mat target_dist, int target_dim=2, mat::Mat *w=NULL);
     void initialize(mat::Mat target_dist, int target_dim, mat::Mat *w=NULL);
     mat::Mat optimize(mat::Mat &initial_x);
-    float optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>> &all_pairs, float);
-    float compute_stress(mat::Mat x);
-    void get_etas(std::vector<float> &etas, int t_max=30, int t_maxmax=200, float eps=0.03);
+    double optimize_iter(mat::Mat &pos, std::vector<std::pair<int, int>> &all_pairs, double);
+    double compute_stress(mat::Mat x);
+    void get_etas(std::vector<double> &etas, int t_max=30, int t_maxmax=200, double eps=0.03);
 };
 
 #endif //MULTILEVEL_STRESS_C___SGD_H

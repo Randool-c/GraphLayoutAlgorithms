@@ -61,7 +61,7 @@ namespace maxmatch{
 
             // 插入边
             int src, dst;
-            float tmp_edge_weights;
+            double tmp_edge_weights;
             for (int i = 0; i < n_nodes; ++i){
                 for (auto &it : graph.edges[i]){
                     if (i >= it.first) continue;
@@ -83,10 +83,10 @@ namespace maxmatch{
             mat::Mat pos = solve_r(optimizer, subgraph, target_dim, th);
             // refine
             mat::Mat ans_pos = mat::empty(n_nodes, target_dim);
-            float dx, dy;
+            double dx, dy;
             for (int i = 0; i < subgraph_n_nodes; ++i){
-                dx = (rand() / (float)RAND_MAX - 0.5) * 2;
-                dy = (rand() / (float)RAND_MAX - 0.5) * 2;
+                dx = (rand() / (double)RAND_MAX - 0.5) * 2;
+                dy = (rand() / (double)RAND_MAX - 0.5) * 2;
                 if (contracted[i].first == contracted[i].second){
                     ans_pos(contracted[i].first, 0) = pos(i, 0) + dx;
                     ans_pos(contracted[i].first, 1) = pos(i, 1) + dy;

@@ -29,7 +29,7 @@ public:
     int n_edges;
     int node_cnt;
     std::vector<std::string> nodes;
-    std::vector<std::unordered_map<int, float>> edges; // first: node no, second: edge length
+    std::vector<std::unordered_map<int, double>> edges; // first: node no, second: edge length
     std::map<std::string, int> node_name_to_idx;
 
     Graph(): n_nodes(0), n_edges(0), node_cnt(0){}
@@ -46,12 +46,12 @@ public:
     void insert_node(int node_name);
     bool exist_node(std::string node_name);
     bool exist_node(int node_name);
-    void insert_edge(std::string src, std::string dst, float dist=1.0);
-    void insert_edge(int src, int dst, float dist);
+    void insert_edge(std::string src, std::string dst, double dist=1.0);
+    void insert_edge(int src, int dst, double dist);
     bool exist_edge(std::string src, std::string dst);
     bool exist_edge(int src, int dst);
-    float get_edge_len(int, int);
-    float get_edge_len(std::string, std::string);
+    double get_edge_len(int, int);
+    double get_edge_len(std::string, std::string);
     void weight_edge_len();
     void save(const std::string path);
 //    Mat get_laplacian(){}

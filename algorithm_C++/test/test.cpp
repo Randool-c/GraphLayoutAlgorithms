@@ -21,8 +21,8 @@ using namespace std;
 
 int POS_INT_INF = 0x7f800000;
 int NEG_INT_INF = 0xff800000;
-const float POS_INF = *((float*)&POS_INT_INF);
-const float NEG_INF = *((float*)&NEG_INT_INF);
+const double POS_INF = *((double*)&POS_INT_INF);
+const double NEG_INF = *((double*)&NEG_INT_INF);
 
 //class TestClass{
 //public:
@@ -62,9 +62,8 @@ void printv(vector<pair<int, int>> &v){
 }
 
 int main(){
-    srand((unsigned)time(NULL));
-    for (int i = 0; i < 10; ++i){
-        cout << rand() % 50 << endl;
-    }
+    priority_queue<double> haha;
+    haha.push(1.1);
+    cout << haha.top() << endl;
     return 0;
 }

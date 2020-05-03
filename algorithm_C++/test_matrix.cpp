@@ -4,7 +4,7 @@ using namespace std;
 
 
 int main(){
-    mat::Mat<float> xarr(3, 3);
+    mat::Mat<double> xarr(3, 3);
     mat::random(xarr);
     vector<int> container = {2,3,4,5};
     xarr.print();

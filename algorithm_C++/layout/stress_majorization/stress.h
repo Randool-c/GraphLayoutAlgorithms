@@ -32,7 +32,7 @@ public:
     void construct_lap_z(mat::Mat &dst_lap_z, mat::Mat &z);
     void operator()(mat::Mat &);
     void cg(mat::Mat &, mat::Mat &, mat::Mat &);
-    float compute_stress(mat::Mat);
+    double compute_stress(mat::Mat);
     mat::Mat stress_optimize_iter(mat::Mat &, mat::Mat &);
     mat::Mat optimize(mat::Mat &initial_x);
     ~StressOptimizer();

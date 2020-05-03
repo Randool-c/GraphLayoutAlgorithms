@@ -13,8 +13,8 @@ namespace shortest_path{
 
 struct dist_pair{
     int node;
-    float dist;
-    dist_pair(int x, float y): node(x), dist(y) {}
+    double dist;
+    dist_pair(int x, double y): node(x), dist(y) {}
     bool operator>(const dist_pair &other) const{
         return dist > other.dist;
     }
@@ -26,7 +26,7 @@ inline mat::Mat dijkstra_single(int source, Graph &graph){
 //    std::vector dist(n_nodes, `consts`::POS_INF);
 
     mat::Mat row(1, n_nodes);
-    float *dist = row.arr->array;
+    double *dist = row.arr->array;
     for (int i = 0; i < n_nodes; ++i){
         dist[i] = POS_INF;
     }
@@ -76,6 +76,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
             nearest_node = heap.top().node;
             nearest_dist = heap.top().dist;
             heap.pop();
+
             if (flag[nearest_node]) continue;
 
             flag[nearest_node] = true;

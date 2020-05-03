@@ -25,7 +25,7 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
         weights = 1 / (dist ^ 2);
     }
 
-//    float tmp_sum = 0;
+//    double tmp_sum = 0;
 //    for (int row_no = 0; row_no < n_nodes; ++row_no) {
 //        tmp_sum = 0;
 //        for (int i = 0; i < n_nodes; ++i) {
@@ -38,7 +38,7 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
 
     lap = weights.copy();
 
-    float row_sum;
+    double row_sum;
     for (int i = 0; i < n_nodes; ++i){
         row_sum = 0;
         for (int j = 0; j < n_nodes; ++j){
@@ -55,7 +55,7 @@ void StressOptimizer::initialize(mat::Mat target_dist, int dim, mat::Mat *w) {
 
 void StressOptimizer::construct_lap_z(mat::Mat &lap_z, mat::Mat &z) {
     mat::zeros(lap_z);
-    float sum_z;
+    double sum_z;
     for (int i = 0; i < n_nodes; ++i){
         sum_z = 0;
         for (int j = 0; j < n_nodes; ++j){
@@ -73,16 +73,16 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
      * solve the linear system Ax=b
      */
 
-    float th = 1e-2;
+    double th = 0.1;
     mat::Mat r = b - A.mm(x);
     mat::Mat p = r;
-    float r_at_r = r.dot(r);
+    double r_at_r = r.dot(r);
 
     mat::Mat A_at_p;
-    float alpha;
+    double alpha;
     mat::Mat newr;
-    float newr_at_newr = 0;
-    float beta;
+    double newr_at_newr = 0;
+    double beta;
     A.save("A.txt");
 //    b.print();
     r.save("r.txt");
@@ -106,9 +106,9 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
     }
 }
 
-float StressOptimizer::compute_stress(mat::Mat x) {
-    float stress = 0;
-    float stress_ij;
+double StressOptimizer::compute_stress(mat::Mat x) {
+    double stress = 0;
+    double stress_ij;
     for (int i = 0; i < n_nodes; ++i){
         for (int j = i + 1; j < n_nodes; ++j){
             stress_ij = (x[i] - x[j]).l2_norm() / dist(i, j) - 1;
@@ -137,14 +137,14 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
 }
 
 mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
-    float th = 1e-2;
+    double th = 1e-2;
 
     mat::Mat lap_z(n_nodes, n_nodes);
     mat::Mat z = initial_x;
     mat::Mat x = stress_optimize_iter(lap_z, z);
 
-    float stress_z = compute_stress(z);
-    float stress_x = compute_stress(x);
+    double stress_z = compute_stress(z);
+    double stress_x = compute_stress(x);
     std::cout << stress_z << " " << stress_x << std::endl;
     while (stress_z - stress_x >= th * stress_z){
         z = x;

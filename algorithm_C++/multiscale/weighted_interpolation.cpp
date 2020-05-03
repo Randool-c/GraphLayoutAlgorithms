@@ -8,14 +8,14 @@ namespace weighted_interpolation{
          * @weights: 图的weights矩阵，其中往往weight = 1 / (dist * dist), dist为距离矩阵
          */
 
-        float t = 0.05;
-        float delta_t = 0.05;
+        double t = 0.05;
+        double delta_t = 0.05;
         int num_sweeps = 4;
         int n_nodes = weights.nr;
 
-        float partial_degree;
-        float degree;
-        float ratio;
+        double partial_degree;
+        double degree;
+        double ratio;
 
         std::vector<int> indices(n_nodes);
         for (int i = 0; i < n_nodes; ++i) indices[i] = i;
@@ -59,7 +59,7 @@ namespace weighted_interpolation{
         for (int i = 0; i < sub_n_nodes; ++i){
             interpolation_m(representatives_v[i], i) = 1;
         }
-        float tmp_weight_sum;
+        double tmp_weight_sum;
         for (int i = 0; i < n_nodes; ++i){
             if (representatives.find(i) == representatives.end()){
                 tmp_weight_sum = 0;

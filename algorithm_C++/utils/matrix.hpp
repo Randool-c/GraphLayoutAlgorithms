@@ -20,7 +20,7 @@
 
 namespace mat {
 
-template<typename T=float> class Mat {
+template<typename T=double> class Mat {
 public:
     int nr;
     int nc;
@@ -279,12 +279,12 @@ public:
         }
     }
 
-    float l2_norm(){
+    double l2_norm(){
         if (nc != 1 && nr != 1){
             throw ShapeNotMatch();
         }
         else{
-            float ans = 0;
+            double ans = 0;
             for (int i = 0; i < nr * nc; ++i){
                 ans += array[i] * array[i];
             }
@@ -314,14 +314,14 @@ std::ostream &operator<<(std::ostream &os, const Mat<T> &m){
     }
 }
 
-inline void random(Mat<float> &matrix){
+inline void random(Mat<double> &matrix){
     srand(static_cast<unsigned int>(time(NULL)));
     for (int i = 0; i < matrix.size(); ++i){
-        matrix.array[i] = (float)(rand()) / RAND_MAX;
+        matrix.array[i] = (double)(rand()) / RAND_MAX;
     }
 }
 
-template<typename T=float, typename T1=float>
+template<typename T=double, typename T1=double>
 Mat<T> operator-(T1 num, Mat<T> &target){
     Mat<T> ans(target.nr, target.nc);
     for (int i = 0; i < target.size(); ++i){

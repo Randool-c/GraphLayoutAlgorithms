@@ -19,6 +19,7 @@
 #include <ctime>
 using namespace std;
 
+//const string datasetname = "custom_dataset";
 const string datasetname = "bcspwr10";
 //const string datasetname = "dw256A";
 // const string datasetname = "crystk02";
@@ -68,12 +69,12 @@ void run_layout(){
 //    start_multiscale = clock();
 //    run_multilevel();
 //    end_multiscale = clock();
-//    t_multiscale = (float)(end_multiscale - start_multiscale) / CLOCKS_PER_SEC;
+//    t_multiscale = (double)(end_multiscale - start_multiscale) / CLOCKS_PER_SEC;
 //
 //    start_layout = clock();
 //    run_layout();
 //    end_layout = clock();
-//    t_layout = (float)(end_layout - start_layout) / CLOCKS_PER_SEC;
+//    t_layout = (double)(end_layout - start_layout) / CLOCKS_PER_SEC;
 //
 //    std::cout << "加上Multiscale算法后耗时：" << t_multiscale << "秒" << std::endl;
 //    std::cout << "直接进行布局耗时：" << t_layout << "秒" << std::endl;
@@ -81,7 +82,7 @@ void run_layout(){
 
 int main() {
     int test_times = 10;
-    float accu_seconds = 0;
+    double accu_seconds = 0;
 
     for (int i = 0; i < test_times; ++i) {
         clock_t start, end;
@@ -89,8 +90,8 @@ int main() {
         run_multilevel();
 //    run_layout();
         end = clock();
-        cout << "cost: " << (float) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
-        accu_seconds += (float) (end - start) / CLOCKS_PER_SEC;
+        cout << "cost: " << (double) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
+        accu_seconds += (double) (end - start) / CLOCKS_PER_SEC;
     }
     cout << "average cost: " << accu_seconds / test_times << endl;
     return 0;

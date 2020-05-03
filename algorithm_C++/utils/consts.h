@@ -7,8 +7,8 @@
 
 #include<string>
 
-extern const float POS_INF;
-extern const float NEG_INF;
+extern const double POS_INF;
+extern const double NEG_INF;
 extern const std::string ROOT;
 
 #endif //MULTILEVEL_STRESS_C___CONSTS_H

@@ -5,7 +5,7 @@
 #include "nicely.h"
 
 namespace nicely{
-    void generate_k_list(std::vector<int> &k_list, int n_nodes, float ratio, int th){
+    void generate_k_list(std::vector<int> &k_list, int n_nodes, double ratio, int th){
         /*
          * 当新的图的节点个数小于th时
          */
@@ -66,7 +66,7 @@ namespace nicely{
 
             // contracting
             int rootsrc, rootdst;
-            float min_cost;
+            double min_cost;
             std::pair<int, int> contracted_pair;
             std::vector<int> intersection_set;
             int cluster_score, degree_score, homotopic_score, score;
@@ -114,7 +114,7 @@ namespace nicely{
             for (int i = 0; i < n_nodes; ++i){
                 clusters[root_to_idx[disjoint_set.get_root(i)]].insert(i);
             }
-            float weight;
+            double weight;
             int src_idx, dst_idx;
             std::cout << "here>? " << std::endl;
             for (int src : roots){
@@ -141,8 +141,8 @@ namespace nicely{
             ans_pos.set_rows(roots, pos);
             for (int i = 0; i < n_nodes; ++i){
                 if (disjoint_set.roots.find(i) == disjoint_set.roots.end()){
-                    ans_pos(i, 0) = ans_pos(disjoint_set.get_root(i), 0) + rand() / (float)RAND_MAX;
-                    ans_pos(i, 1) = ans_pos(disjoint_set.get_root(i), 1) + rand() / (float)RAND_MAX;
+                    ans_pos(i, 0) = ans_pos(disjoint_set.get_root(i), 0) + rand() / (double)RAND_MAX;
+                    ans_pos(i, 1) = ans_pos(disjoint_set.get_root(i), 1) + rand() / (double)RAND_MAX;
                 }
             }
             optimizer->initialize(dist, target_dim);
@@ -153,7 +153,7 @@ namespace nicely{
 
     mat::Mat solve(BaseOptimizer *optimizer, Graph &graph, int target_dim) {
         int n_nodes = graph.n_nodes;
-        float ratio = 0.5;
+        double ratio = 0.5;
         int th = 100;
 
         std::vector<int> k_list;

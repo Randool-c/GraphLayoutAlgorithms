@@ -7,7 +7,7 @@
 using namespace std;
 
 
-//void printm(mat::Mat<float> const &input){
+//void printm(mat::Mat<double> const &input){
 //    input.print();
 //}
 

@@ -27,14 +27,14 @@ namespace adapted_init{
         }
     }
 
-    float get_lr(int step_cnt){
-        static float k = (1 / max_step) * std::log(lr_min / lr_max);
+    double get_lr(int step_cnt){
+        static double k = (1 / max_step) * std::log(lr_min / lr_max);
         return lr_max * std::exp(k * step_cnt);
     }
 
-    float compute_stress(mat::Mat dist, mat::Mat x){
-        float stress = 0;
-        float stress_ij;
+    double compute_stress(mat::Mat dist, mat::Mat x){
+        double stress = 0;
+        double stress_ij;
         int n_nodes = x.nr;
         for (int i = 0; i < n_nodes; ++i){
             for (int j = i + 1; j < n_nodes; ++j){
@@ -73,10 +73,10 @@ namespace adapted_init{
 
 //            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
             // 确定非representatives的位置，通过stress energy求导迭代得到
-            float lr;
-            float mu, dx, dy, mag, r, rx, ry, delta;
+            double lr;
+            double mu, dx, dy, mag, r, rx, ry, delta;
             int src, dst;
-            float max_delta = 0;
+            double max_delta = 0;
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) != centers_set.end()) continue;
 
@@ -114,7 +114,7 @@ namespace adapted_init{
         }
     }
 
-    void generate_k_list(std::vector<int> &k_list, int n_nodes, float ratio, int th) {
+    void generate_k_list(std::vector<int> &k_list, int n_nodes, double ratio, int th) {
         int n = n_nodes;
         std::cout << "n: " << n << std::endl;
         do {
@@ -127,7 +127,7 @@ namespace adapted_init{
     mat::Mat solve(BaseOptimizer *optimizer, Graph &graph, int target_dim){
         int n_nodes = graph.n_nodes;
 //        int th = 100;
-//        float ratio = 0.33;
+//        double ratio = 0.33;
 
         mat::Mat dist = mat::empty(n_nodes, n_nodes);
         shortest_path::dijkstra(dist, graph);
@@ -141,6 +141,7 @@ namespace adapted_init{
 //            std::cout << x << " sdf " << std::endl;
 //        }
 
+        std::cout << "enter" << std::endl;
         mat::Mat pos = solve_r(optimizer, dist, weights, target_dim, k_list, 0);
         return pos;
     }

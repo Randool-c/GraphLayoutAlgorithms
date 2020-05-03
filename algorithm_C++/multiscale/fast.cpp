@@ -84,8 +84,8 @@ namespace fast {
 
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) == centers_set.end()){
-                    initial_x(i, 0) = initial_x(nearest_center[i], 0) + rand() / (float)RAND_MAX;
-                    initial_x(i, 1) = initial_x(nearest_center[i], 1) + rand() / (float)RAND_MAX;
+                    initial_x(i, 0) = initial_x(nearest_center[i], 0) + rand() / (double)RAND_MAX;
+                    initial_x(i, 1) = initial_x(nearest_center[i], 1) + rand() / (double)RAND_MAX;
                 }
             }
         }

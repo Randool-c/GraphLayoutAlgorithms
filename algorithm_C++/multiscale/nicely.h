@@ -23,7 +23,7 @@ using namespace std;
 
 namespace nicely{
     mat::Mat solve(BaseOptimizer *optimizer, Graph &graph, int target_dim);
-    void generate_k_list(std::vector<int> &k_list, int n_nodes, float ratio=0.5, int th=100);
+    void generate_k_list(std::vector<int> &k_list, int n_nodes, double ratio=0.5, int th=100);
     mat::Mat solve_r(BaseOptimizer*, Graph &, int, std::vector<int> &, int);
     void merge_update(DisjointSet&, std::vector<std::set<int>>&, int, int);
 

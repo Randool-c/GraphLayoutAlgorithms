@@ -20,8 +20,8 @@ using namespace std;
 class ClassA{
 public:
     int n;
-    float *data;
-    float *d_data;
+    double *data;
+    double *d_data;
     ClassA(int size);
     ClassA(ClassA &&other);
     ClassA add(ClassA &other);

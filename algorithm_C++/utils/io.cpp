@@ -28,6 +28,8 @@ void io::read_dataset(std::string dataset_name, Graph &graph){
         fin.getline(buffer, 128);
         std::istringstream is(buffer);
         is >> src >> dst;
+        if (src == dst) continue;
         graph.insert_edge(src, dst, 1);
     }
+    graph.save("haha.txt");
 }

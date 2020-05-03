@@ -36,7 +36,7 @@ bool Graph::exist_node(int node_idx) {
     return node_idx < n_nodes;
 }
 
-void Graph::insert_edge(std::string src, std::string dst, float dist){
+void Graph::insert_edge(std::string src, std::string dst, double dist){
     insert_node(src);
     insert_node(dst);
     int src_idx = node_name_to_idx[src];
@@ -60,7 +60,7 @@ bool Graph::exist_edge(int src_idx, int dst_idx) {
     return edges[src_idx].find(dst_idx) != edges[src_idx].end();
 }
 
-void Graph::insert_edge(int src, int dst, float dist) {
+void Graph::insert_edge(int src, int dst, double dist) {
     /*
      * src, dst: 节点名字
      */
@@ -68,13 +68,13 @@ void Graph::insert_edge(int src, int dst, float dist) {
     insert_edge(std::to_string(src), std::to_string(dst), dist);
 }
 
-float Graph::get_edge_len(std::string src_name, std::string dst_name){
+double Graph::get_edge_len(std::string src_name, std::string dst_name){
     int src_idx = node_name_to_idx[src_name];
     int dst_idx = node_name_to_idx[dst_name];
     return get_edge_len(src_idx, dst_idx);
 }
 
-float Graph::get_edge_len(int src_idx, int dst_idx){
+double Graph::get_edge_len(int src_idx, int dst_idx){
     if (!exist_edge(src_idx, dst_idx)) throw EdgeNotExistError();
     return edges[src_idx][dst_idx];
 }
@@ -95,7 +95,7 @@ void Graph::save(const std::string path) {
 //    freopen((char*)path.data(), "w", stdout);
     std::ofstream fout((char*)path.data(), std::ios::out);
     for (int i = 0; i < n_nodes; ++i){
-        for (std::unordered_map<int, float>::iterator it = edges[i].begin(); it != edges[i].end(); ++it){
+        for (std::unordered_map<int, double>::iterator it = edges[i].begin(); it != edges[i].end(); ++it){
             if (i < it->first){
                 fout << i << ' ' << it->first << '\n';
             }
@@ -128,7 +128,7 @@ bool Graph::check_connected() {
     int src, dst;
     int rootsrc, rootdst;
     for (src = 0; src < n_nodes; ++src){
-        for (std::unordered_map<int, float>::iterator it = edges[src].begin(); it != edges[src].end(); ++it){
+        for (std::unordered_map<int, double>::iterator it = edges[src].begin(); it != edges[src].end(); ++it){
             dst = it->first;
             rootsrc = get_root(parent, src);
             rootdst = get_root(parent, dst);

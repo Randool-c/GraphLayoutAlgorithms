@@ -37,14 +37,14 @@ namespace mat {
         public:
             int refer;      // 当refer降为0时，在外部类销毁时会同时销毁外部类中动态分配的Array内部类对象，否则不销毁
             bool is_view;   // 是不是与其他对象共享了一段数组, 作为一个视图. 作为视图时，销毁对象并不删除array的动态分配的内存.
-            float *array;
+            double *array;
             int n;
 
             Array(int size);
 
-            Array(float *start_pos, int size);
+            Array(double *start_pos, int size);
 
-            float &operator[](int idx);
+            double &operator[](int idx);
         };
 
         Array *arr;
@@ -54,7 +54,7 @@ namespace mat {
 
         Mat(const Mat &other);
 
-        Mat(float *start_pos, int n_r, int n_c);
+        Mat(double *start_pos, int n_r, int n_c);
 
         ~Mat();
 
@@ -68,9 +68,9 @@ namespace mat {
 
         Mat copy();
 
-        float &operator()(int i, int j);
+        double &operator()(int i, int j);
 
-        float &operator()(int i);
+        double &operator()(int i);
 
         Mat operator()(std::vector<int> &i, std::vector<int> &j);
 
@@ -80,7 +80,7 @@ namespace mat {
 
         Mat reshape(int newr, int newc) const;
 
-        float l2_norm();
+        double l2_norm();
 
         Mat operator[](int irow) const;
 
@@ -88,9 +88,9 @@ namespace mat {
 
         Mat mm(const Mat &other);
 
-        float dot(const Mat &other);
+        double dot(const Mat &other);
 
-        float item() const;
+        double item() const;
 
         Mat get_row(int irow);
 
@@ -121,17 +121,17 @@ namespace mat {
 
 
 Mat operator+(const Mat &m1, const Mat &m2);
-Mat operator+(const Mat &m, float num);
-Mat operator+(float num, const Mat &m);
+Mat operator+(const Mat &m, double num);
+Mat operator+(double num, const Mat &m);
 Mat operator-(const Mat &m1, const Mat &m2);
-Mat operator-(const Mat &m, float num);
-Mat operator-(float num, const Mat &m);
+Mat operator-(const Mat &m, double num);
+Mat operator-(double num, const Mat &m);
 Mat operator*(const Mat &m1, const Mat &m2);
-Mat operator*(const Mat &m, float num);
-Mat operator*(float num, const Mat &m);
+Mat operator*(const Mat &m, double num);
+Mat operator*(double num, const Mat &m);
 Mat operator/(const Mat &m1, const Mat &m2);
-Mat operator/(const Mat &m, float num);
-Mat operator/(float num, const Mat &m);
+Mat operator/(const Mat &m, double num);
+Mat operator/(double num, const Mat &m);
 Mat mm(const Mat &m1, const Mat &m2);
 
 void random(Mat &m);
@@ -141,7 +141,7 @@ Mat random(int nr, int nc);
 Mat empty(int nr, int nc);
 Mat zeros(int nr, int nc);
 
-Mat fill(int nr, int nc, float number);
+Mat fill(int nr, int nc, double number);
 };
 
 #endif //MULTILEVEL_STRESS_C___MATRIX_H

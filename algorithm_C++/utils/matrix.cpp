@@ -9,18 +9,18 @@ namespace mat {
     Mat::Array::Array(int size) {
         is_view = false;
         refer = 1;
-        array = new float[size];
+        array = new double[size];
         n = size;
     }
 
-    Mat::Array::Array(float *start_pos, int size) {
+    Mat::Array::Array(double *start_pos, int size) {
         is_view = true;
         refer = 1;
         array = start_pos;
         n = size;
     }
 
-    float &Mat::Array::operator[](int idx) {
+    double &Mat::Array::operator[](int idx) {
         return array[idx];
     }
 
@@ -31,7 +31,7 @@ namespace mat {
         arr = new Array(nr * nc);
     }
 
-    Mat::Mat(float *start_pos, int n_r, int n_c) {
+    Mat::Mat(double *start_pos, int n_r, int n_c) {
         nr = n_r;
         nc = n_c;
         arr = new Array(start_pos, nr * nc);
@@ -80,18 +80,18 @@ namespace mat {
 
     Mat Mat::copy() {
         Mat ans(nr, nc);
-        memcpy(ans.arr->array, arr->array, sizeof(float) * nr * nc);
+        memcpy(ans.arr->array, arr->array, sizeof(double) * nr * nc);
         return ans;
     }
 
-    float &Mat::operator()(int i, int j) {
+    double &Mat::operator()(int i, int j) {
         if (i < 0 || j < 0 || i >= nr || j >= nc) {
             throw IndexOutOfBound();
         }
         return arr->array[i * nc + j];
     }
 
-    float &Mat::operator()(int i) {
+    double &Mat::operator()(int i) {
         if (nr != 1 && nc != 1) throw ShapeNotMatch();
         else if (i < 0 || i >= nr * nc) throw IndexOutOfBound();
         else {
@@ -158,8 +158,8 @@ namespace mat {
         return ans;
     }
 
-    float Mat::l2_norm() {
-        float sum_square = 0;
+    double Mat::l2_norm() {
+        double sum_square = 0;
         for (int i = 0; i < nr * nc; ++i){
             sum_square += arr->array[i] * arr->array[i];
         }
@@ -177,7 +177,7 @@ namespace mat {
             Mat ans(nr, other.nc);
 //            memset(ans.arr->array, 0, sizeof(T) * nr * nc);
             zeros(ans);
-            float tmp;
+            double tmp;
             for (int i = 0; i < nr; ++i) {
                 for (int k = 0; k < nc; ++k) {
                     tmp = arr->array[i * nc + k];
@@ -190,17 +190,17 @@ namespace mat {
         }
     }
 
-    float Mat::dot(const mat::Mat &other) {
+    double Mat::dot(const mat::Mat &other) {
         if ((nr != 1 && nc != 1) || (other.nr != 1 && other.nc != 1) ||
             nr * nc != other.nr * other.nc) throw ShapeNotMatch();
-        float ans= 0;
+        double ans= 0;
         for (int i = 0; i < nr * nc; ++i){
             ans += arr->array[i] * other.arr->array[i];
         }
         return ans;
     }
 
-    float Mat::item() const{
+    double Mat::item() const{
         if (nr != 1 || nc != 1) throw ShapeNotMatch();
         return arr->array[0];
     }
@@ -209,7 +209,7 @@ namespace mat {
         if (row_outof_bound(irow)) throw IndexOutOfBound();
 
         Mat ans(1, nc);
-        memcpy(ans.arr->array, arr->array + irow * nc, sizeof(float) * nc);
+        memcpy(ans.arr->array, arr->array + irow * nc, sizeof(double) * nc);
         return ans;
     }
 
@@ -221,7 +221,7 @@ namespace mat {
 //            for (int j = 0; j < nc; ++j){
 //                ans(i, j) = (*this)(irows[i], j);
 //            }
-            memcpy(ans.arr->array + i * nc, arr->array + irows[i] * nc, sizeof(float) * nc);
+            memcpy(ans.arr->array + i * nc, arr->array + irows[i] * nc, sizeof(double) * nc);
         }
         return ans;
     }
@@ -250,7 +250,7 @@ namespace mat {
     void Mat::set_row(int irow, mat::Mat &target) {
         if (nc != target.size()) throw SetRowError();
 
-        memcpy(arr->array + irow * nc, target.arr->array, sizeof(float) * nc);
+        memcpy(arr->array + irow * nc, target.arr->array, sizeof(double) * nc);
     }
 
     void Mat::set_rows(std::vector<int> &irows, mat::Mat &target) {
@@ -259,7 +259,7 @@ namespace mat {
         for (int i = 0; i < irows.size(); ++i){
             if (row_outof_bound(irows[i])) throw IndexOutOfBound();
 
-            memcpy(arr->array + irows[i] * nc, target.arr->array + i * nc, sizeof(float) * nc);
+            memcpy(arr->array + irows[i] * nc, target.arr->array + i * nc, sizeof(double) * nc);
         }
     }
 
@@ -295,8 +295,8 @@ namespace mat {
     }
 
     Mat Mat::argmin(int axis) {
-        float minvalue;
-        float minpos;
+        double minvalue;
+        double minpos;
         if (axis == 0){
             Mat ans(nr, 1);
             for (int i = 0; i < nr; ++i){
@@ -328,8 +328,8 @@ namespace mat {
     }
 
     Mat Mat::argmax(int axis) {
-        float maxvalue;
-        float maxpos;
+        double maxvalue;
+        double maxpos;
         if (axis == 1){
             Mat ans(nr, 1);
             for (int i = 0; i < nr; ++i){
@@ -370,7 +370,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator+(const Mat &m, float num){
+    Mat operator+(const Mat &m, double num){
         Mat ans(m.nr, m.nc);
         for (int i = 0; i < m.nr * m.nc; ++i){
             ans.arr->array[i] = num + m.arr->array[i];
@@ -378,7 +378,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator+(float num, const Mat &m){
+    Mat operator+(double num, const Mat &m){
         Mat ans;
         ans = m + num;
         return ans;
@@ -394,13 +394,13 @@ namespace mat {
         return ans;
     }
 
-    Mat operator-(const Mat &m, float num){
+    Mat operator-(const Mat &m, double num){
         Mat ans;
         ans = m + (-num);
         return ans;
     }
 
-    Mat operator-(float num, const Mat &m){
+    Mat operator-(double num, const Mat &m){
         Mat ans(m.nr, m.nc);
         for (int i = 0; i < m.nr * m.nc; ++i){
             ans.arr->array[i] = num - m.arr->array[i];
@@ -418,7 +418,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator*(const Mat &m, float num){
+    Mat operator*(const Mat &m, double num){
         Mat ans(m.nr, m.nc);
         for (int i = 0; i < m.nr * m.nc; ++i){
             ans.arr->array[i] = num * m.arr->array[i];
@@ -426,7 +426,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator*(float num, const Mat &m){
+    Mat operator*(double num, const Mat &m){
         Mat ans;
         ans = m * num;
         return ans;
@@ -442,7 +442,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator/(float num, const Mat &m){
+    Mat operator/(double num, const Mat &m){
         Mat ans(m.nr, m.nc);
         for (int i = 0; i < m.nr * m.nc; ++i){
             ans.arr->array[i] = num / m.arr->array[i];
@@ -450,7 +450,7 @@ namespace mat {
         return ans;
     }
 
-    Mat operator/(const Mat &m, float num){
+    Mat operator/(const Mat &m, double num){
         Mat ans;
         ans = m * (1 / num);
         return ans;
@@ -468,7 +468,7 @@ namespace mat {
             zeros(ans);
             for (int i = 0; i < m1.nr; ++i) {
                 for (int k = 0; k < m1.nc; ++k) {
-                    float tmp = m1.arr->array[i * m1.nc + k];
+                    double tmp = m1.arr->array[i * m1.nc + k];
                     for (int j = 0; j < m2.nc; ++j) {
                         ans.arr->array[i * m2.nc + j] += tmp * m2.arr->array[k * m2.nc + j];
                     }
@@ -481,12 +481,12 @@ namespace mat {
     void random(Mat &m){
         srand(static_cast<unsigned int>(time(NULL)));
         for (int i = 0; i < m.size(); ++i){
-            m.arr->array[i] = (float)(rand()) / RAND_MAX;
+            m.arr->array[i] = (double)(rand()) / RAND_MAX;
         }
     }
 
     void zeros(Mat &m){
-        memset(m.arr->array, 0, sizeof(float) * m.size());
+        memset(m.arr->array, 0, sizeof(double) * m.size());
     }
 
     void arange(Mat &m, int start){
@@ -495,7 +495,7 @@ namespace mat {
         }
     }
 
-    void fill(Mat &m, float number){
+    void fill(Mat &m, double number){
         for (int i = 0; i < m.size(); ++i){
             m.arr->array[i] = number;
         }
@@ -505,7 +505,7 @@ namespace mat {
         Mat ans(nr, nc);
         srand(static_cast<unsigned int>(time(NULL)));
         for (int i = 0; i < ans.size(); ++i){
-            ans.arr->array[i] = (float)(rand()) / RAND_MAX;
+            ans.arr->array[i] = (double)(rand()) / RAND_MAX;
         }
         return ans;
     }
@@ -520,7 +520,7 @@ namespace mat {
         return ans;
     }
 
-    Mat fill(int nr, int nc, float number){
+    Mat fill(int nr, int nc, double number){
         Mat ans(nr, nc);
         fill(ans, number);
         return ans;
