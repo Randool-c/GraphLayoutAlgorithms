@@ -1,6 +1,4 @@
 #include "stress.h"
-#define scout std::cout
-#define sendl std::endl
 
 StressOptimizer::StressOptimizer() {
 
@@ -137,22 +135,22 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
 }
 
 mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
+    std::cout << "enter!!!!!!" << std::endl;
     double th = 1e-3;
 
     mat::Mat lap_z(n_nodes, n_nodes);
     mat::Mat z = initial_x;
     mat::Mat x = stress_optimize_iter(lap_z, z);
 
-//    std::cout << "computing stress error " << std::endl;
     double stress_z = compute_stress(z);
     double stress_x = compute_stress(x);
-    std::cout << stress_z << " " << stress_x << std::endl;
+//    std::cout << stress_z << " " << stress_x << std::endl;
     while (stress_z - stress_x >= th * stress_z){
         z = x;
         stress_z = stress_x;
         x = stress_optimize_iter(lap_z, z);
         stress_x = compute_stress(x);
-        std::cout << stress_z << " " << stress_x << std::endl;
+//        std::cout << stress_z << " " << stress_x << std::endl;
     }
     return x;
 }

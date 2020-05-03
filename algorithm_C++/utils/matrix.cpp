@@ -330,7 +330,7 @@ namespace mat {
     Mat Mat::argmax(int axis) {
         float maxvalue;
         float maxpos;
-        if (axis == 0){
+        if (axis == 1){
             Mat ans(nr, 1);
             for (int i = 0; i < nr; ++i){
                 maxvalue = NEG_INF;
@@ -507,7 +507,6 @@ namespace mat {
         for (int i = 0; i < ans.size(); ++i){
             ans.arr->array[i] = (float)(rand()) / RAND_MAX;
         }
-        ans.get_row(0).print();
         return ans;
     }
 

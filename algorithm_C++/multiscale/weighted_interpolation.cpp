@@ -10,7 +10,7 @@ namespace weighted_interpolation{
 
         float t = 0.05;
         float delta_t = 0.05;
-        int num_sweeps = 5;
+        int num_sweeps = 4;
         int n_nodes = weights.nr;
 
         float partial_degree;
@@ -91,6 +91,7 @@ namespace weighted_interpolation{
             mat::Mat sub_dist = dist(representatives_v, representatives_v);
             mat::Mat sub_weight = dist(representatives_v, representatives_v);
             mat::Mat pos = solve_r(optimizer, sub_dist, sub_weight, target_dim, th);
+            std::cout << "refining: " << n_nodes << std::endl;
 
             mat::Mat interpolation_m = construct_interpolation_matrix(weights, representatives, representatives_v);
             pos = interpolation_m.mm(pos);

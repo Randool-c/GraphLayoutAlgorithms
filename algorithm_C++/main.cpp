@@ -14,14 +14,15 @@
 #include "layout/sgd/sgd.h"
 #include "multiscale/maxmatch.h"
 #include "multiscale/weighted_interpolation.h"
+#include "multiscale/adapted_init.h"
 #include <string>
 #include <ctime>
 using namespace std;
 
-//const string datasetname = "bcspwr10";
+const string datasetname = "bcspwr10";
 //const string datasetname = "dw256A";
 // const string datasetname = "crystk02";
-const string datasetname = "lshp2233";
+//const string datasetname = "lshp2233";
 //const string datasetname = "1138_bus";
 
 
@@ -33,7 +34,7 @@ void run_multilevel(){
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
     BaseOptimizer *optimizer = new StressOptimizer();
-    mat::Mat ans_x = nicely::solve(optimizer, graph, target_dim);
+    mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");
     graph.save("edges.txt");

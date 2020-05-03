@@ -17,7 +17,7 @@ namespace fast {
 
         int far_node;
         for (int i = 0; i < k - 1; ++i) {
-            far_node = shortest_from_center.argmax().item();
+            far_node = shortest_from_center.argmax(1).item();
             centers.push_back(far_node);
             for (int j = 0; j < n_nodes; ++j) {
                 if (shortest_dist(j, far_node) < shortest_from_center(j)) {

@@ -95,7 +95,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
         x = x + alpha * p;
         newr = r - alpha * A_at_p;
 
-//        std::cout << "norm " << newr.l2_norm() << std::endl;
+        std::cout << "norm " << newr.l2_norm() << std::endl;
         if (newr.l2_norm() < th) break;
 
         newr_at_newr = newr.dot(newr);
@@ -106,7 +106,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
     }
 }
 
-float StressOptimizer::compute_stress(const mat::Mat &x) {
+float StressOptimizer::compute_stress(mat::Mat x) {
     float stress = 0;
     float stress_ij;
     for (int i = 0; i < n_nodes; ++i){
@@ -143,7 +143,6 @@ mat::Mat StressOptimizer::optimize(mat::Mat &initial_x){
     mat::Mat z = initial_x;
     mat::Mat x = stress_optimize_iter(lap_z, z);
 
-//    std::cout << "computing stress error " << std::endl;
     float stress_z = compute_stress(z);
     float stress_x = compute_stress(x);
     std::cout << stress_z << " " << stress_x << std::endl;

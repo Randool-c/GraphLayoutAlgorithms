@@ -118,7 +118,6 @@ namespace nicely{
             int src_idx, dst_idx;
             std::cout << "here>? " << std::endl;
             for (int src : roots){
-                std::cout << "src: " << src << std::endl;
                 for (int dst : neighbors[src]){  // 确保src和dst都为根
                     if (src < dst){
                         weight = 0;

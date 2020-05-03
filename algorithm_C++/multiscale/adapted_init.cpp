@@ -2,19 +2,6 @@
 
 namespace adapted_init{
 
-    struct dist_pair{
-        int target_center;
-        int dist;
-        dist_pair(int t, int d): target_center(t), dist(d) {}
-        dist_pair(dist_pair &&other){
-            target_center = other.target_center;
-            dist = other.dist;
-        }
-        bool operator<(const dist_pair &other) const{
-            return dist < other.dist;
-        }
-    };
-
     void kcenter(std::vector<int> &centers, std::vector<std::set<dist_pair>> &dist_of_centers, int k, mat::Mat &shortest_dist) {
         /*
          * @centers: 一个结果vector，用来保存所有得到的centers
@@ -28,22 +15,41 @@ namespace adapted_init{
 
         int far_node;
         for (int i = 0; i < k - 1; ++i) {
-            far_node = shortest_from_center.argmax().item();
+            far_node = shortest_from_center.argmax(1).item();
+//            std::cout << "far node: " << far_node << std::endl;
             centers.push_back(far_node);
             for (int j = 0; j < n_nodes; ++j) {
+                if (shortest_dist(j, far_node) < shortest_from_center(j)) {
+                    shortest_from_center(j) = shortest_dist(j, far_node);
+                }
                 dist_of_centers[j].insert(dist_pair(far_node, shortest_dist(far_node, j)));
             }
         }
     }
 
     float get_lr(int step_cnt){
-        static float k = (1 / max_step) * std::log(lr_min);
+        static float k = (1 / max_step) * std::log(lr_min / lr_max);
         return lr_max * std::exp(k * step_cnt);
+    }
+
+    float compute_stress(mat::Mat dist, mat::Mat x){
+        float stress = 0;
+        float stress_ij;
+        int n_nodes = x.nr;
+        for (int i = 0; i < n_nodes; ++i){
+            for (int j = i + 1; j < n_nodes; ++j){
+                stress_ij = (x[i] - x[j]).l2_norm() / dist(i, j) - 1;
+                stress_ij *= stress_ij;
+
+                stress += stress_ij;
+            }
+        }
+        return stress;
     }
 
     mat::Mat solve_r(BaseOptimizer *optimizer, mat::Mat dist, mat::Mat weights, int target_dim, std::vector<int> &k_list, int k_idx){
         int n_nodes = dist.nr;
-        std::cout << "n nodes: " << n_nodes << std::endl;
+        std::cout << "nodes: " << n_nodes << std::endl;
         if (k_idx == k_list.size()){
             mat::Mat initial_pos = mat::random(n_nodes, target_dim);
             optimizer->initialize(dist, target_dim, &weights);
@@ -52,7 +58,7 @@ namespace adapted_init{
         }
         else{
             int k = k_list[k_idx];
-            std::vector<std::set<dist_pair>>> dist_of_centers(n_nodes);
+            std::vector<std::set<dist_pair>> dist_of_centers(n_nodes);
             std::vector<int> centers;
             kcenter(centers, dist_of_centers, k, dist);
             std::set<int> centers_set(centers.begin(), centers.end());
@@ -60,26 +66,30 @@ namespace adapted_init{
             mat::Mat sub_dist = dist(centers, centers);
             mat::Mat sub_weights = weights(centers, centers);
             mat::Mat sub_pos = solve_r(optimizer, sub_dist, sub_weights, target_dim, k_list, k_idx + 1);
+            std::cout << "refining: " << n_nodes << " nodes" << std::endl;
 
             mat::Mat ans_pos = mat::random(n_nodes, target_dim);
-            ans_pos.set_rows(centers, pos);
+            ans_pos.set_rows(centers, sub_pos);
 
+//            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
             // 确定非representatives的位置，通过stress energy求导迭代得到
             float lr;
-            float mu, dx, dy, mag, r, rx, ry;
+            float mu, dx, dy, mag, r, rx, ry, delta;
             int src, dst;
+            float max_delta = 0;
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) != centers_set.end()) continue;
 
                 std::vector<int> required_centers;
                 for (dist_pair it : dist_of_centers[i]){
-                    if (it.dist <= 10) required_centers.push_back(it.target_center);
+                    if (it.dist <= max_effective_center_dist) required_centers.push_back(it.target_center);
                     else break;
                 }
 
                 for (int step_cnt = 0; step_cnt < max_step; ++step_cnt) {
+                    max_delta = 0;
+                    lr = get_lr(step_cnt);
                     for (int target : required_centers) {
-                        lr = get_lr(step_cnt);
                         mu = lr * weights(i, target);
 
                         dx = ans_pos(i, 0) - ans_pos(target, 0);
@@ -96,6 +106,7 @@ namespace adapted_init{
                     std::random_shuffle(required_centers.begin(), required_centers.end());
                 }
             }
+//            std::cout << "after: " << compute_stress(dist, ans_pos) << std::endl;
 
             optimizer->initialize(dist, target_dim, &weights);
             ans_pos = optimizer->optimize(ans_pos);
@@ -103,8 +114,9 @@ namespace adapted_init{
         }
     }
 
-    void generate_k_list(std::vector<int> &k_list, int n_nodes, int ratio, int th) {
+    void generate_k_list(std::vector<int> &k_list, int n_nodes, float ratio, int th) {
         int n = n_nodes;
+        std::cout << "n: " << n << std::endl;
         do {
             n *= ratio;
             k_list.push_back(n);
@@ -114,8 +126,8 @@ namespace adapted_init{
 
     mat::Mat solve(BaseOptimizer *optimizer, Graph &graph, int target_dim){
         int n_nodes = graph.n_nodes;
-        int th = 100;
-        float ratio = 0.5;
+//        int th = 100;
+//        float ratio = 0.33;
 
         mat::Mat dist = mat::empty(n_nodes, n_nodes);
         shortest_path::dijkstra(dist, graph);
@@ -124,6 +136,10 @@ namespace adapted_init{
 
         std::vector<int> k_list;
         generate_k_list(k_list, n_nodes, ratio, th);
+
+//        for (auto x : k_list){
+//            std::cout << x << " sdf " << std::endl;
+//        }
 
         mat::Mat pos = solve_r(optimizer, dist, weights, target_dim, k_list, 0);
         return pos;
