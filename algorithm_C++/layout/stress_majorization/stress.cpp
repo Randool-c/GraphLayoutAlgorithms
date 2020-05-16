@@ -95,14 +95,15 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
         x = x + alpha * p;
         newr = r - alpha * A_at_p;
 
-        std::cout << "norm " << newr.l2_norm() << std::endl;
-        if (newr.l2_norm() < th) break;
+//        if (newr.l2_norm() < th) break;
 
         newr_at_newr = newr.dot(newr);
         beta = newr_at_newr / r_at_r;
         p = newr + beta * p;
         r = newr;
         r_at_r = newr_at_newr;
+
+        if (p.l2_norm() < th) break;
     }
 }
 

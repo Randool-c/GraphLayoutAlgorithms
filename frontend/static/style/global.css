@@ -1,0 +1,22 @@
+div#main-div{
+    width: 100%;
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    flex-direction: row;
+}
+
+div#left-div{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+div#middle-div{
+    width: 40%;
+}
+
+div#right-div{
+    width: 30%;
+}

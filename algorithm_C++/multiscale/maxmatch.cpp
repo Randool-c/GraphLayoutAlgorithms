@@ -82,6 +82,7 @@ namespace maxmatch{
 
             mat::Mat pos = solve_r(optimizer, subgraph, target_dim, th);
             // refine
+            std::cout << "n nodes: " << n_nodes << std::endl;
             mat::Mat ans_pos = mat::empty(n_nodes, target_dim);
             double dx, dy;
             for (int i = 0; i < subgraph_n_nodes; ++i){

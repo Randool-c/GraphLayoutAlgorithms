@@ -20,8 +20,8 @@
 using namespace std;
 
 //const string datasetname = "custom_dataset";
-const string datasetname = "bcspwr10";
-//const string datasetname = "dw256A";
+//const string datasetname = "bcspwr10";
+const string datasetname = "dw256A";
 // const string datasetname = "crystk02";
 //const string datasetname = "lshp2233";
 //const string datasetname = "1138_bus";
@@ -34,7 +34,7 @@ void run_multilevel(){
 
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
-    BaseOptimizer *optimizer = new StressOptimizer();
+    BaseOptimizer *optimizer = new SGDOptimizer();
     mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");
@@ -53,13 +53,17 @@ void run_layout(){
 
     mat::Mat dist = mat::empty(n_nodes, n_nodes);
     shortest_path::dijkstra(dist, graph);
-    StressOptimizer optimizer(dist, target_dim);
+    SGDOptimizer optimizer(dist, target_dim);
     mat::Mat initial_x = mat::random(graph.n_nodes, target_dim);
 //    initial_x.save("initial_x.txt");
     mat::Mat ans_x = optimizer.optimize(initial_x);
     ans_x.save("output.txt");
     graph.save("edges.txt");
 }
+
+//int main(){
+//    run_layout();
+//}
 
 //int main(){
 //    clock_t start_multiscale, end_multiscale;
@@ -88,7 +92,7 @@ int main() {
         clock_t start, end;
         start = clock();
         run_multilevel();
-//    run_layout();
+//        run_layout();
         end = clock();
         cout << "cost: " << (double) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
         accu_seconds += (double) (end - start) / CLOCKS_PER_SEC;

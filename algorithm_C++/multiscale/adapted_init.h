@@ -16,12 +16,12 @@
 #include<ctime>
 
 namespace adapted_init{
-    const double lr_max = 10;
-    const double lr_min = 10;
+    const double lr_max = 1;
+    const double lr_min = 1;
     const double max_step = 40;
-    const int max_effective_center_dist = 20;  // stress迭代更新时考虑的最远的center距离
+    const int max_effective_center_dist = 100;  // stress迭代更新时考虑的最远的center距离
     const int th = 100;
-    const double ratio = 0.33;
+    const double ratio = 0.5;
 
     struct dist_pair{
         int target_center;

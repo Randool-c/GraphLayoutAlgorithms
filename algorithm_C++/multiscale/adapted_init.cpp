@@ -68,10 +68,17 @@ namespace adapted_init{
             mat::Mat sub_pos = solve_r(optimizer, sub_dist, sub_weights, target_dim, k_list, k_idx + 1);
             std::cout << "refining: " << n_nodes << " nodes" << std::endl;
 
-            mat::Mat ans_pos = mat::random(n_nodes, target_dim);
+            mat::Mat ans_pos = mat::empty(n_nodes, target_dim);
             ans_pos.set_rows(centers, sub_pos);
 
-//            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
+            for (int i = 0; i < n_nodes; ++i){
+                if (centers_set.find(i) != centers_set.end()) continue;
+
+                ans_pos(i, 0) = ans_pos(dist_of_centers[i].begin()->target_center, 0) + rand() / (double)RAND_MAX;
+                ans_pos(i, 1) = ans_pos(dist_of_centers[i].begin()->target_center, 1) + rand() / (double)RAND_MAX;
+            }
+
+            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
             // 确定非representatives的位置，通过stress energy求导迭代得到
             double lr;
             double mu, dx, dy, mag, r, rx, ry, delta;
@@ -79,6 +86,9 @@ namespace adapted_init{
             double max_delta = 0;
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) != centers_set.end()) continue;
+
+//                ans_pos(i, 0) = ans_pos(dist_of_centers[i].begin()->target_center, 0) + rand() / (double)RAND_MAX;
+//                ans_pos(i, 1) = ans_pos(dist_of_centers[i].begin()->target_center, 1) + rand() / (double)RAND_MAX;
 
                 std::vector<int> required_centers;
                 for (dist_pair it : dist_of_centers[i]){
@@ -106,7 +116,7 @@ namespace adapted_init{
                     std::random_shuffle(required_centers.begin(), required_centers.end());
                 }
             }
-//            std::cout << "after: " << compute_stress(dist, ans_pos) << std::endl;
+            std::cout << "after: " << compute_stress(dist, ans_pos) << std::endl;
 
             optimizer->initialize(dist, target_dim, &weights);
             ans_pos = optimizer->optimize(ans_pos);
@@ -141,7 +151,6 @@ namespace adapted_init{
 //            std::cout << x << " sdf " << std::endl;
 //        }
 
-        std::cout << "enter" << std::endl;
         mat::Mat pos = solve_r(optimizer, dist, weights, target_dim, k_list, 0);
         return pos;
     }
