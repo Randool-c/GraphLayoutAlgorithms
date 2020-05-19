@@ -83,11 +83,11 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
     mat::Mat newr;
     double newr_at_newr = 0;
     double beta;
-    A.save("A.txt");
+//    A.save("A.txt");
 //    b.print();
-    r.save("r.txt");
-    b.save("b1.txt");
-    x.save("x.txt");
+//    r.save("r.txt");
+//    b.save("b1.txt");
+//    x.save("x.txt");
 //    std::cout << r_at_r << " r_at_r " << std::endl;
     while (1){
         A_at_p = A.mm(p);

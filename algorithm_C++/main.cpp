@@ -21,10 +21,11 @@ using namespace std;
 
 //const string datasetname = "custom_dataset";
 //const string datasetname = "bcspwr10";
-const string datasetname = "dw256A";
+//const string datasetname = "dw256A";
 // const string datasetname = "crystk02";
 //const string datasetname = "lshp2233";
-//const string datasetname = "1138_bus";
+const string datasetname = "1138_bus";
+//const string datasetname = "conf5_0-4x4-10";
 
 
 void run_multilevel(){
@@ -34,7 +35,7 @@ void run_multilevel(){
 
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
-    BaseOptimizer *optimizer = new SGDOptimizer();
+    BaseOptimizer *optimizer = new StressOptimizer();
     mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");

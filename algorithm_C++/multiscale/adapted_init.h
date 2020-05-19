@@ -5,6 +5,7 @@
 #include "../utils/matrix.h"
 #include "../utils/shortest_path.hpp"
 #include "../layout/base_optimizer.hpp"
+#include "../utils/consts.h"
 #include<vector>
 #include<algorithm>
 #include<set>

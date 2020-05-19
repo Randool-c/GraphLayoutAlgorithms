@@ -24,12 +24,13 @@ void io::read_dataset(std::string dataset_name, Graph &graph){
 
     graph.resize(n_nodes, n_edges);
     std::string line;
+    double edge_len;
     for (int i = 0; i < n_edges; ++i){
         fin.getline(buffer, 128);
         std::istringstream is(buffer);
-        is >> src >> dst;
+        is >> src >> dst >> edge_len;
         if (src == dst) continue;
-        graph.insert_edge(src, dst, 1);
+        graph.insert_edge(src, dst, -edge_len);
     }
     graph.save("haha.txt");
 }

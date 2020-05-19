@@ -7,16 +7,34 @@ div#main-div{
     flex-direction: row;
 }
 
+.form-group{
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
 div#left-div{
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 20%;
+    /*padding: 15px 10px;*/
+    /*margin: 0;*/
+    border-radius: 10px;
+    border: 2px #ccc solid;
 }
 
 div#middle-div{
-    width: 40%;
+    width: 50%;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px #ccc solid;
+    /*margin: 3px;*/
 }
 
 div#right-div{
     width: 30%;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px #ccc solid;
+    /*margin: 3px;*/
 }

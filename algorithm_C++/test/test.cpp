@@ -65,5 +65,9 @@ int main(){
     priority_queue<double> haha;
     haha.push(1.1);
     cout << haha.top() << endl;
+
+    double a, b;
+    cin >> a >> b;
+    cout << a << b << endl;
     return 0;
 }

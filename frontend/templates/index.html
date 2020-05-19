@@ -20,7 +20,39 @@
 <body>
 
 <div id="main-div">
-    <div id="left-div">yesman</div>
+    <div id="left-div">
+        <div id="select-dataset-div" class="param-selection p-2 border-bottom">
+            <div class="form-group row p-1">
+                <label for="dataset-select" class="col-sm-4 col-form-label col-form-label-sm">数据集</label>
+                <div class="col-sm-8">
+                    <select id="dataset-select" class="custom-select custom-select-sm">
+
+                    </select>
+                </div>
+            </div>
+            <div id="dataset-detail-div" style="display: none"></div>
+        </div>
+        <div id="select-layout-div" class="param-selection p-2 border-bottom">
+            <div class="form-group row p-1">
+                <label for="layout-select" class="col-sm-4 col-form-label col-form-label-sm">布局方法</label>
+                <div class="col-sm-8">
+                    <select id="layout-select" class="custom-select custom-select-sm">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="select-multiscale-div" class="param-selection p-2 border-bottom">
+            <div class="form-group row p-1">
+                <label for="multiscale-select" class="col-sm-4 col-form-label col-form-label-sm">多尺度方法</label>
+                <div class="col-sm-8">
+                    <select id="multiscale-select" class="custom-select custom-select-sm">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="middle-div">integrate</div>
     <div id="right-div">form_union</div>
 </div>

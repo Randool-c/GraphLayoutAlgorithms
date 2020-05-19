@@ -76,6 +76,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
             nearest_node = heap.top().node;
             nearest_dist = heap.top().dist;
             heap.pop();
+//            std::cout << nearest_dist << std::endl;
 
             if (flag[nearest_node]) continue;
 
@@ -83,7 +84,8 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
             --n_left;
             dist(source, nearest_node) = nearest_dist;
             for (auto &item : graph.edges[nearest_node]){
-                if (dist(source, nearest_node) + item.second < dist(source, item.first)){
+                std::cout << "hahaha " << item.second << std::endl;
+                if (flag[nearest_node] == false && dist(source, nearest_node) + item.second < dist(source, item.first)){
                     dist(source, item.first) = dist(source, nearest_node) + item.second;
                     heap.push(dist_pair(item.first, dist(source, item.first)));
                 }
