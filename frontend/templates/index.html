@@ -7,55 +7,97 @@
     <link rel="stylesheet" href="{{ static('style/global.css') }}"/>
 
     <script src="{{ static('script/jQuery/jquery-3.3.1.min.js') }}"></script>
-{#    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"#}
-{#            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"#}
-{#            crossorigin="anonymous"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"#}
-{#            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"#}
-{#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"#}
+    {#            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"#}
+    {#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"#}
+    {#            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"#}
+    {#            crossorigin="anonymous"></script>#}
     <script src="{{ static('script/popper/popper.js') }}"></script>
     <script src="{{ static('style/bootstrap-4.3.1-dist/js/bootstrap.js') }}"></script>
     <script src="{{ static('script/D3/d3.js') }}"></script>
+
+    <script src="{{ static('script/observer.js') }}"></script>
+    <script src="{{ static('script/leftDiv.js') }}"></script>
 </head>
 <body>
 
 <div id="main-div">
     <div id="left-div">
-        <div id="select-dataset-div" class="param-selection p-2 border-bottom">
-            <div class="form-group row p-1">
-                <label for="dataset-select" class="col-sm-4 col-form-label col-form-label-sm">数据集</label>
-                <div class="col-sm-8">
-                    <select id="dataset-select" class="custom-select custom-select-sm">
-
-                    </select>
+        <div id="left-top-div" class="block-container">
+            <h6 class="text-center my-2">参数选择</h6>
+            <div id="select-dataset-div" class="param-selection p-2 border-bottom">
+                <div class="form-group row p-1">
+                    <label for="dataset-select" class="col-sm-4 col-form-label col-form-label-sm">数据集</label>
+                    <div class="col-sm-8 pl-0">
+                        <select id="dataset-select" class="custom-select custom-select-sm">
+                            <option value="none" selected>选择数据集</option>
+                            {% for name in datasetnames %}
+                                <option value="{{ name }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div id="dataset-detail-div" style="display: none"></div>
-        </div>
-        <div id="select-layout-div" class="param-selection p-2 border-bottom">
-            <div class="form-group row p-1">
-                <label for="layout-select" class="col-sm-4 col-form-label col-form-label-sm">布局方法</label>
-                <div class="col-sm-8">
-                    <select id="layout-select" class="custom-select custom-select-sm">
-
-                    </select>
+            <div id="select-layout-div" class="param-selection p-2 border-bottom">
+                <div class="form-group row p-1">
+                    <label for="layout-select" class="col-sm-4 col-form-label col-form-label-sm">布局方法</label>
+                    <div class="col-sm-8 pl-0">
+                        <select id="layout-select" class="custom-select custom-select-sm">
+                            <option value="none" selected>无</option>
+                            <option value="sm">stress majorization</option>
+                            <option value="sgd">SGD</option>
+                        </select>
+                    </div>
                 </div>
+                <div id="layout-params-div" style="display: none"></div>
+            </div>
+            <div id="select-multiscale-div" class="param-selection p-2 border-bottom">
+                <div class="form-group row p-1">
+                    <label for="multiscale-select" class="col-sm-4 col-form-label col-form-label-sm">多尺度方法</label>
+                    <div class="col-sm-8 pl-0">
+                        <select id="multiscale-select" class="custom-select custom-select-sm">
+                            <option value="none" selected>无</option>
+                            <option value="fast">Fast</option>
+                            <option value="maxmatch">max match</option>
+                            <option value="weighted_interpolation">weighted interpolation</option>
+                            <option value="edge_contracting">edge contracting</option>
+                            <option value="adapted_init">adapted initialization</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="multiscale-params-div" style="display: none"></div>
+            </div>
+            <div class="form-group row p-1 justify-content-around mt-2">
+                <button id="start-drawing-button" class="btn btn-outline-dark" type="button">开始</button>
+                <button id="stop-drawing-button" class="btn btn-outline-dark" type="button">停止</button>
             </div>
         </div>
-        <div id="select-multiscale-div" class="param-selection p-2 border-bottom">
-            <div class="form-group row p-1">
-                <label for="multiscale-select" class="col-sm-4 col-form-label col-form-label-sm">多尺度方法</label>
-                <div class="col-sm-8">
-                    <select id="multiscale-select" class="custom-select custom-select-sm">
-
-                    </select>
-                </div>
+        <div id="left-bottom-div" class="block-container">
+            <h6 class="text-center my-2">数据集信息</h6>
+            <div id="dataset-info-div">
+                <table class="table table-responsive-sm mb-0"></table>
             </div>
         </div>
     </div>
-    <div id="middle-div">integrate</div>
-    <div id="right-div">form_union</div>
+    <div id="middle-div" class="block-container">
+        <div id="middle-top-div" class="border">
+            <div id="middle-top-left-div" class="border"></div>
+            <div id="middle-top-right-div"></div>
+        </div>
+        <div id="middle-bottom-div"></div>
+    </div>
+    <div id="right-div" class="block-container">form_union</div>
 </div>
+
+
+<script>
+    $(function () {
+        let observer = new Observer();
+        let leftDivView = new LeftDiv(observer, "{{ url('vis:request_dataset_info') }}");
+        leftDivView.fnInitialize();
+    })
+</script>
 
 </body>
 </html>

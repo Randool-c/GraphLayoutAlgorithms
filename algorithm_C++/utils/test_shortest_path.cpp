@@ -20,6 +20,7 @@ int main(){
     std::string a = "0";
     Graph graph;
     io::read_dataset(datasetname, graph);
+    graph.save("graph.txt");
 //    graph.insert_node(a);
 //    graph.insert_node("1");
 //    graph.insert_node("2");

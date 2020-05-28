@@ -28,14 +28,21 @@ namespace fast {
         }
     }
 
-    void generate_k_list(std::vector<int> &k_list, int n_nodes, int ratio, int th) {
-        int n = th;
-        do {
-            k_list.push_back(n);
+    void generate_k_list(std::vector<int> &k_list, int n_nodes){
+        std::stack<int> numbers;
+        numbers.push(n_nodes);
+        int n = n_nodes;
+        do{
             n *= ratio;
-        } while (n < n_nodes);
-        k_list.push_back(n_nodes);
+            numbers.push(n);
+        } while(n > th);
+
+        while (!numbers.empty()){
+            k_list.push_back(numbers.top());
+            numbers.pop();
+        }
     }
+
 
     mat::Mat solve(BaseOptimizer *optimizer, Graph &graph, int target_dim) {
         std::srand((int)std::time(0));

@@ -5,6 +5,7 @@ div#main-div{
     top: 0;
     bottom: 0;
     flex-direction: row;
+    font-size: 50%;
 }
 
 .form-group{
@@ -13,28 +14,65 @@ div#main-div{
     margin-bottom: 0;
 }
 
+.block-container{
+    border-radius: 10px;
+    border: 2px #ccc solid;
+}
+
+input[type=range]::-webkit-slider-thumb{
+    background-color: #666;
+    transition-duration: 0.2s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover{
+    background-color: #aaa;
+}
+
 div#left-div{
     display: flex;
     flex-direction: column;
     width: 20%;
     /*padding: 15px 10px;*/
     /*margin: 0;*/
-    border-radius: 10px;
-    border: 2px #ccc solid;
+}
+
+div#left-top-div{
+    display: flex;
+    flex-direction: column;
+    height: 65%;
+}
+
+div#left-bottom-div{
+    display: flex;
+    flex-direction: column;
+    height: calc(35%);
 }
 
 div#middle-div{
+    width: calc(65vh * 2);
+    display: flex;
+    flex-direction: column;
+}
+
+div#middle-top-div{
+    display: flex;
+    flex-direction: row;
+    height: calc(65vh);
+}
+
+div#middle-top-left-div{
     width: 50%;
-    padding: 15px;
-    border-radius: 10px;
-    border: 2px #ccc solid;
-    /*margin: 3px;*/
+}
+
+div#middle-top-right-div{
+    width: 50%;
+}
+
+div#middle-bottom{
+    height: calc(35vh);
 }
 
 div#right-div{
-    width: 30%;
-    padding: 15px;
-    border-radius: 10px;
-    border: 2px #ccc solid;
-    /*margin: 3px;*/
+    width: calc(80vw - 65vh * 2);
+
 }

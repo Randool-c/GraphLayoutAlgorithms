@@ -83,11 +83,11 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
     mat::Mat newr;
     double newr_at_newr = 0;
     double beta;
-//    A.save("A.txt");
+    A.save("A.txt");
 //    b.print();
-//    r.save("r.txt");
-//    b.save("b1.txt");
-//    x.save("x.txt");
+    r.save("r.txt");
+    b.save("b1.txt");
+    x.save("x.txt");
 //    std::cout << r_at_r << " r_at_r " << std::endl;
     while (1){
         A_at_p = A.mm(p);
@@ -103,6 +103,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
         r = newr;
         r_at_r = newr_at_newr;
 
+//        std::cout << p.l2_norm() << std::endl;
         if (p.l2_norm() < th) break;
     }
 }
@@ -128,9 +129,7 @@ mat::Mat StressOptimizer::stress_optimize_iter(mat::Mat &lap_z, mat::Mat &z){
     mat::Mat ans_x(n_nodes, target_dim);
     for (int i = 0; i < target_dim; ++i){
         x = z.get_col(i);
-        lap_z.save("lap_z.txt");
         b = lap_z.mm(x);
-        b.save("b.txt");
         cg(lap, x, b);
         ans_x.set_col(i, x);
     }

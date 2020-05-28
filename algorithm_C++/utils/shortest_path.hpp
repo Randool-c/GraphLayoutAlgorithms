@@ -64,7 +64,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
     }
 
     int nearest_node;
-    int nearest_dist;
+    double nearest_dist;
 //    std::cout << graph.n_nodes << " nodes " << graph.n_edges << " edges " << std::endl;
     for (int source = 0; source < n_nodes; ++source){
         std::priority_queue<dist_pair, std::vector<dist_pair>, std::greater<dist_pair>> heap;
@@ -72,6 +72,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
         n_left = n_nodes;
 
         heap.push(dist_pair(source, 0));
+        dist(source, source) = 0;
         while (n_left > 0){
             nearest_node = heap.top().node;
             nearest_dist = heap.top().dist;
@@ -84,8 +85,7 @@ inline void dijkstra(mat::Mat &dist, Graph &graph){
             --n_left;
             dist(source, nearest_node) = nearest_dist;
             for (auto &item : graph.edges[nearest_node]){
-                std::cout << "hahaha " << item.second << std::endl;
-                if (flag[nearest_node] == false && dist(source, nearest_node) + item.second < dist(source, item.first)){
+                if (flag[item.first] == false && item.first != nearest_node && dist(source, nearest_node) + item.second < dist(source, item.first)){
                     dist(source, item.first) = dist(source, nearest_node) + item.second;
                     heap.push(dist_pair(item.first, dist(source, item.first)));
                 }

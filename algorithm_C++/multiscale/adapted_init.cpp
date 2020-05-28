@@ -36,14 +36,8 @@ namespace adapted_init{
         double stress = 0;
         double stress_ij;
         int n_nodes = x.nr;
-//        dist.save("dist.txt");
-        std::cout << "3 and 17 " << dist(3, 17) << std::endl;
         for (int i = 0; i < n_nodes; ++i){
             for (int j = i + 1; j < n_nodes; ++j){
-                if (dist(i, j ) == 0){
-                    std::cout << i << " " << j <<  "breaking  " << std::endl;
-                    abort();
-                }
                 stress_ij = (x[i] - x[j]).l2_norm() / dist(i, j) - 1;
                 stress_ij *= stress_ij;
 
@@ -77,8 +71,6 @@ namespace adapted_init{
             mat::Mat ans_pos = mat::empty(n_nodes, target_dim);
             ans_pos.set_rows(centers, sub_pos);
 
-//            ans_pos.save("ans_pos_0.txt");
-
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) != centers_set.end()) continue;
 
@@ -86,9 +78,7 @@ namespace adapted_init{
                 ans_pos(i, 1) = ans_pos(dist_of_centers[i].begin()->target_center, 1) + rand() / (double)RAND_MAX;
             }
 
-//            ans_pos.save("ans_pos_1.txt");
-
-//            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
+            std::cout << "before: " << compute_stress(dist, ans_pos) << " ";
             // 确定非representatives的位置，通过stress energy求导迭代得到
             double lr;
             double mu, dx, dy, mag, r, rx, ry, delta;
@@ -96,9 +86,6 @@ namespace adapted_init{
             double max_delta = 0;
             for (int i = 0; i < n_nodes; ++i){
                 if (centers_set.find(i) != centers_set.end()) continue;
-
-//                ans_pos(i, 0) = ans_pos(dist_of_centers[i].begin()->target_center, 0) + rand() / (double)RAND_MAX;
-//                ans_pos(i, 1) = ans_pos(dist_of_centers[i].begin()->target_center, 1) + rand() / (double)RAND_MAX;
 
                 std::vector<int> required_centers;
                 for (dist_pair it : dist_of_centers[i]){
@@ -126,7 +113,7 @@ namespace adapted_init{
                     std::random_shuffle(required_centers.begin(), required_centers.end());
                 }
             }
-//            std::cout << "after: " << compute_stress(dist, ans_pos) << std::endl;
+            std::cout << "after: " << compute_stress(dist, ans_pos) << std::endl;
 
             optimizer->initialize(dist, target_dim, &weights);
             ans_pos = optimizer->optimize(ans_pos);
@@ -140,7 +127,6 @@ namespace adapted_init{
         do {
             n *= ratio;
             k_list.push_back(n);
-//            n *= ratio;
         } while (n > th);
     }
 
@@ -157,10 +143,6 @@ namespace adapted_init{
 
         std::vector<int> k_list;
         generate_k_list(k_list, n_nodes, ratio, th);
-
-//        for (auto x : k_list){
-//            std::cout << x << " sdf " << std::endl;
-//        }
 
         mat::Mat pos = solve_r(optimizer, dist, weights, target_dim, k_list, 0);
         return pos;

@@ -3,16 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../static/style/bootstrap-4.3.1-dist/css/bootstrap.css"/>
+
     <script src="../static/script/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="../static/script/popper/popper.js"></script>
+    <script src="../static/style/bootstrap-4.3.1-dist/js/bootstrap.js"></script>
+    <script src="../static/script/D3/d3.js"></script>
+
 </head>
 <body>
 
-<button id="btn">click here</button>
-<div id="block" style="background: blue; display: none"> hello world </div>
+<div class="form-group row p-1">
+    <label for="stop-th-range" class="col-sm-4 col-form-label col-form-label-sm">stop th</label>
+    <input type="range" class="custom-range col-sm-4 mt-2" min="0.01" max="0.5" step="0.01" id="stop-th-range"
+           value="0.03"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="tmax-range" class="col-sm-4 col-form-label col-form-label-sm">tmax</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="1" max="50" step="1" id="tmax-range"
+           value="30"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="tmaxmax-range" class="col-sm-4 col-form-label col-form-label-sm">tmaxmax</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="50" max="500" step="1" id="tmaxmax-range"
+           value="200"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="eps-range" class="col-sm-4 col-form-label col-form-label-sm">eps</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="0.01" max="0.2" step="0.01" id="eps-range"
+           value="0.03"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+
+<div class="form-group row p-1">
+    <label for="t-range" class="col-sm-4 col-form-label col-form-label-sm">t</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="0.01" max="0.1" step="0.01" id="t-range"
+           value="0.05"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="delta-t-range" class="col-sm-4 col-form-label col-form-label-sm">delta_t</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="0.02" max="0.08" step="0.01" id="delta-t-range"
+           value="0.05"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="sweeps-range" class="col-sm-4 col-form-label col-form-label-sm">num_sweeps</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="3" max="10" step="1" id="sweeps-range"
+           value="5"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+<div class="form-group row p-1">
+    <label for="th-range" class="col-sm-4 col-form-label col-form-label-sm">threshold</label>
+    <input type="range" class="col-sm-4 custom-range mt-2" min="20" max="200" step="1" id="th-range"
+           value="100"/>
+    <input type="text" class="col-sm-3 offset-sm-1 border-0"/>
+</div>
+
+
+<div class="container">
+    <div class="form-group row p-1">
+        <label for="stop-th" class="col-4">stop th</label>
+        <input type="range" class="custom-range col-4" min="1e-5" max="0.1" step="1e-5" id="stop-th"/>
+        <input type="text" class="col-2 border-0"/>
+    </div>
+</div>
+
 
 <script>
-    $('#btn').click(function(){
-        $('#block').text('hei').slideDown();
+    $('input[type=range]').mousemove(function () {
+        $('input[type=text]').val(this.value)
+    });
+    $('input[type=text]').change(function () {
+        console.log('hello world')
+        $('input[type=range]').val(parseFloat(this.value));
     })
 </script>
 

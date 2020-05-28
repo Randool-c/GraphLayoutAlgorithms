@@ -13,7 +13,6 @@ namespace nicely{
         do {
             n *= ratio;
             k_list.push_back(n);
-//            n *= ratio;
         } while (n > th);
     }
 

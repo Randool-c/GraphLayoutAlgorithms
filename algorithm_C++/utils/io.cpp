@@ -11,7 +11,8 @@ void io::read_dataset(std::string dataset_name, Graph &graph){
     std::ifstream fin((char*)path.data(), std::ios::in);
 
     do {
-        fin.getline(buffer, 128);
+        fin.getline(buffer, 256);
+        std::cout << buffer << std::endl;
     } while(buffer[0] == '%');
 
     int n_nodes, n_edges;
@@ -28,9 +29,10 @@ void io::read_dataset(std::string dataset_name, Graph &graph){
     for (int i = 0; i < n_edges; ++i){
         fin.getline(buffer, 128);
         std::istringstream is(buffer);
-        is >> src >> dst >> edge_len;
+        is >> src >> dst;
         if (src == dst) continue;
-        graph.insert_edge(src, dst, -edge_len);
+        graph.insert_edge(src, dst, 1);
     }
     graph.save("haha.txt");
+    fin.close();
 }
