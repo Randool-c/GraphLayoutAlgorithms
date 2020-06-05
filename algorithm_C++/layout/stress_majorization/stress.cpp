@@ -73,7 +73,7 @@ void StressOptimizer::cg(mat::Mat &A, mat::Mat &x, mat::Mat &b){
      * solve the linear system Ax=b
      */
 
-    double th = 0.1;
+    double th = 1;
     mat::Mat r = b - A.mm(x);
     mat::Mat p = r;
     double r_at_r = r.dot(r);

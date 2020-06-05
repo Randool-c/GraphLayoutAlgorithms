@@ -26,7 +26,8 @@ using namespace std;
 //const string datasetname = "lshp2233";
 //const string datasetname = "1138_bus";
 //const string datasetname = "conf5_0-4x4-10";
-const string datasetname = "can_838";
+//const string datasetname = "can_838";
+const string datasetname = "bcsstk38";
 
 
 void run_multilevel(){
@@ -37,7 +38,7 @@ void run_multilevel(){
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
     BaseOptimizer *optimizer = new StressOptimizer();
-    mat::Mat ans_x = fast::solve(optimizer, graph, target_dim);
+    mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");
     graph.save("edges.txt");
@@ -86,24 +87,24 @@ void run_layout(){
 //    std::cout << "直接进行布局耗时：" << t_layout << "秒" << std::endl;
 //}
 
-//int main() {
-//    int test_times = 10;
-//    double accu_seconds = 0;
-//
-//    for (int i = 0; i < test_times; ++i) {
-//        clock_t start, end;
-//        start = clock();
-//        run_multilevel();
-////        run_layout();
-//        end = clock();
-//        cout << "cost: " << (double) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
-//        accu_seconds += (double) (end - start) / CLOCKS_PER_SEC;
-//    }
-//    cout << "average cost: " << accu_seconds / test_times << endl;
-//    return 0;
-//}
+int main() {
+    int test_times = 1;
+    double accu_seconds = 0;
 
-int main(){
-    run_multilevel();
+    for (int i = 0; i < test_times; ++i) {
+        clock_t start, end;
+        start = clock();
+        run_multilevel();
+//        run_layout();
+        end = clock();
+        cout << "cost: " << (double) (end - start) / CLOCKS_PER_SEC << "秒" << endl;
+        accu_seconds += (double) (end - start) / CLOCKS_PER_SEC;
+    }
+    cout << "average cost: " << accu_seconds / test_times << endl;
     return 0;
 }
+
+//int main(){
+//    run_multilevel();
+//    return 0;
+//}
