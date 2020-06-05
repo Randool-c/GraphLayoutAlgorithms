@@ -105,7 +105,7 @@ class LayoutParamsDiv {
 
     fnGetParams(){
         let params = {};
-        this.layoutParamsDiv.find('input[type=range]').forEach(function(){
+        this.layoutParamsDiv.find('input[type=range]').each(function(){
             params[this.name] = this.value;
         });
         return params;
@@ -191,7 +191,7 @@ class MultiscaleParamsDiv {
 
     fnGetParams(){
         let params = {};
-        this.multiscaleParamsDiv.find('input[type=range]').forEach(function(){
+        this.multiscaleParamsDiv.find('input[type=range]').each(function(){
             params[this.name] = this.value;
         });
         return params;
