@@ -291,7 +291,6 @@ namespace mat {
             }
             fout << std::endl;
         }
-        fout << std::endl;
     }
 
     Mat Mat::argmin(int axis) {

@@ -119,8 +119,9 @@ mat::Mat SGDOptimizer::optimize(mat::Mat &initial_x) {
     double max_delta;
     for (double eta : etas){
         max_delta = optimize_iter(initial_x, all_pairs, eta);
-        std::cout << "stress: " << compute_stress(initial_x) << " max delta: " << max_delta << std::endl;
+        std::cout << " max delta: " << max_delta << std::endl;
         if (max_delta < stop_th) break;
     }
+    std::cout << "compute stress: " << compute_stress(initial_x) << std::endl;
     return initial_x;
 }

@@ -1,0 +1,23 @@
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/chenst/projects/Vis/Main/algorithms/algorithm_C++/main.cpp" "/home/chenst/projects/Vis/Main/algorithms/algorithm_C++/build/CMakeFiles/drawing.dir/main.cpp.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  )
+
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/chenst/projects/Vis/Main/algorithms/algorithm_C++/build/layout/CMakeFiles/layout.dir/DependInfo.cmake"
+  "/home/chenst/projects/Vis/Main/algorithms/algorithm_C++/build/multiscale/CMakeFiles/multiscale.dir/DependInfo.cmake"
+  "/home/chenst/projects/Vis/Main/algorithms/algorithm_C++/build/utils/CMakeFiles/utils.dir/DependInfo.cmake"
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

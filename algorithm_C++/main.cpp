@@ -27,7 +27,8 @@ using namespace std;
 //const string datasetname = "1138_bus";
 //const string datasetname = "conf5_0-4x4-10";
 //const string datasetname = "can_838";
-const string datasetname = "bcsstk38";
+//const string datasetname = "bcsstk38";
+string datasetname;
 
 
 void run_multilevel(){
@@ -37,7 +38,7 @@ void run_multilevel(){
 
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
-    BaseOptimizer *optimizer = new StressOptimizer();
+    BaseOptimizer *optimizer = new SGDOptimizer();
     mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");
@@ -56,7 +57,7 @@ void run_layout(){
 
     mat::Mat dist = mat::empty(n_nodes, n_nodes);
     shortest_path::dijkstra(dist, graph);
-    SGDOptimizer optimizer(dist, target_dim);
+    StressOptimizer optimizer(dist, target_dim);
     mat::Mat initial_x = mat::random(graph.n_nodes, target_dim);
 //    initial_x.save("initial_x.txt");
     mat::Mat ans_x = optimizer.optimize(initial_x);
@@ -87,10 +88,11 @@ void run_layout(){
 //    std::cout << "直接进行布局耗时：" << t_layout << "秒" << std::endl;
 //}
 
-int main() {
+int main(int argc, char *argv[]) {
     int test_times = 1;
     double accu_seconds = 0;
 
+    datasetname = argv[1];
     for (int i = 0; i < test_times; ++i) {
         clock_t start, end;
         start = clock();
