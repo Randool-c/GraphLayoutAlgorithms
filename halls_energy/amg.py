@@ -126,7 +126,8 @@ class Lapsolver:
 def run_halls_energy():
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'custom_dataset', 'custom_dataset.mtx'))
+    name = 'lshp2233'
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, name, '{}.mtx'.format(name)))
     print(len(nodes))
     print(len(edges))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
@@ -137,4 +138,4 @@ def run_halls_energy():
     result_x = solver.execute()
     print(result_x)
     # ans = {'nodes': result_x.tolist(), 'edges': edges}
-    write_data('result.json', result_x.tolist(), edges)
+    write_data(result_x.tolist(), edges)

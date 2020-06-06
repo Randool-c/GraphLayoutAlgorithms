@@ -74,9 +74,10 @@ class Solver:
 
 
 def run_hde():
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    name = 'lshp2233'
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, name, '{}.mtx'.format(name)))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, '1138_bus', '1138_bus.mtx'))
     dim = 2
     solver = Solver(nodes, edges, target_dim=dim)
     result_x = solver.hde()
-    write_data('result.json', result_x.tolist(), edges)
+    write_data(result_x.tolist(), edges)

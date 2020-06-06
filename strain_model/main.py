@@ -21,10 +21,13 @@ class Solver:
 
 
 def run_strain_model():
-    nodes, edges = read_data(pjoin(path.DATA_ROOT, 'dw256A', 'dw256A.mtx'))
+    name = 'lshp2233'
+    nodes, edges = read_data(pjoin(path.DATA_ROOT, name, '{}.mtx'.format(name)))
     # nodes, edges = read_data(pjoin(path.DATA_ROOT, 'test_dataset', 'test_dataset.mtx'))
     dim = 2
     solver = Solver(nodes, edges, dim)
     result_x = solver.execute()
-    write_data('result.json', result_x.tolist(), edges)
+    write_data(result_x.tolist(), edges)
+    # np.savetxt('nodes.txt', result_x)
+    # np.savetxt('edges.txt', edges)
     print(result_x)

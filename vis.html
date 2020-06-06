@@ -17,7 +17,7 @@
 
     async function read(){
         let edges_str = await d3.text('edges.txt');
-        let pos_str = await d3.text('output.txt');
+        let pos_str = await d3.text('nodes.txt');
         let edges = edges_str.split('\n');
         let pos = pos_str.split('\n');
         edges = edges.slice(0, edges.length - 1);

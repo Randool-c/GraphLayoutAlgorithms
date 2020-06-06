@@ -15,5 +15,5 @@ def read_data(filepath):
         if src == dst:
             continue
 
-        edges.append([node_to_idx[src], node_to_idx[dst]])
+        edges.append([int(node_to_idx[src]), int(node_to_idx[dst])])
     return nodes, edges

@@ -38,7 +38,7 @@ void run_multilevel(){
 
     int target_dim = 2;
     int n_nodes = graph.n_nodes;
-    BaseOptimizer *optimizer = new SGDOptimizer();
+    BaseOptimizer *optimizer = new StressOptimizer();
     mat::Mat ans_x = adapted_init::solve(optimizer, graph, target_dim);
 
     ans_x.save("output.txt");

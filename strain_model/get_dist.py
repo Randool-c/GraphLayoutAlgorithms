@@ -1,6 +1,6 @@
 import numpy as np
 
-from .shortest_path import floyed
+from utils.shortest_path import dijkstra_all
 
 
 def get_graph_list(nodes, edges):
@@ -49,6 +49,6 @@ def get_dist(nodes, edges):
     for edge in edges:
         add_edge_len(graphlist, edge, uniform=True)
     print(graphlist)
-    adj_len_matrix = get_adj_matrix(graphlist)
-    dist = floyed(adj_len_matrix)  # dist[i][j] represents the expected distance between i and j
+    # adj_len_matrix = get_adj_matrix(graphlist)
+    dist = dijkstra_all(graphlist)  # dist[i][j] represents the expected distance between i and j
     return dist

@@ -5,4 +5,4 @@ from visualize.visualize_graph import visualize
 if __name__ == '__main__':
     run_halls_energy()
 
-    visualize()
+    # visualize()
