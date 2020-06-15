@@ -16,8 +16,9 @@
     });
 
     async function read(){
-        let edges_str = await d3.text('edges.txt');
-        let pos_str = await d3.text('output.txt');
+        let name = 'bcsstk36/';
+        let edges_str = await d3.text(name + 'edges.txt');
+        let pos_str = await d3.text(name + 'output.txt');
         let edges = edges_str.split('\n');
         let pos = pos_str.split('\n');
         edges = edges.slice(0, edges.length - 1);
@@ -42,7 +43,7 @@
                 padding: {left: 20, right: 20, bottom: 20, top: 20, row: 40, col: 40},
                 nodeRadius: 0,
                 nodeStrokeWidth: 2,
-                edgeStrokeWidth: 1,
+                edgeStrokeWidth: 0.3,
             };
 
             this.graphGroup = this.d3Svg.append('g').attr('class', 'graph-group')
